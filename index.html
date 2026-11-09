@@ -10,34 +10,38 @@
 body{margin:0;font-family:Arial,sans-serif;background:#f1f6fa;color:#18334d}
 header{background:linear-gradient(120deg,#087b55,#1266a5);color:white;padding:28px 18px;text-align:center}
 header h1{margin:0;font-size:30px}
-header p{margin:8px 0 0}
-main{max-width:650px;margin:25px auto;padding:15px}
+main{max-width:750px;margin:25px auto;padding:15px}
 .card{background:white;padding:22px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 14px #00000012}
 h2{margin-top:0;color:#087b55}
-button{border:0;border-radius:8px;padding:13px 17px;background:#087b55;color:white;font-weight:bold;cursor:pointer}
-button.blue{background:#1266a5}
-button.gray{background:#667788}
+button{border:0;border-radius:8px;padding:13px 17px;background:#087b55;color:white;font-weight:bold;cursor:pointer;margin:4px}
+.blue{background:#1266a5}
+.gray{background:#667788}
+.red{background:#b83232}
 input{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #ccd7df;border-radius:8px;font-size:16px}
 label{font-weight:bold}
-.tabs{display:flex;gap:10px;margin-bottom:18px}
+.hidden{display:none!important}
+.tabs{display:flex;gap:10px}
 .tabs button{flex:1}
-.hidden{display:none}
-.student{border:1px solid #dce5eb;border-radius:10px;padding:13px;margin:12px 0}
-.student img{width:75px;height:75px;object-fit:cover;border-radius:50%}
-.status{font-weight:bold;color:#087b55}
 .small{font-size:13px;color:#667788}
+.student{border:1px solid #dce5eb;border-radius:10px;padding:13px;margin:12px 0}
+.student img{width:90px;height:90px;object-fit:cover;border-radius:10px}
+.status{font-weight:bold;color:#087b55}
+.notice{padding:12px;background:#edf5fa;border-radius:8px;margin:12px 0}
 </style>
 </head>
 <body>
+
 <header>
 <h1>JSA</h1>
 <p>Jerry Smart Attendance Management System</p>
+<p id="connection">Connecting to Firebase...</p>
 </header>
 
 <main>
+
 <div class="tabs">
 <button onclick="show('student')">Student</button>
-<button class="blue" onclick="show('lecturer')">Lecturer</button>
+<button class="blue" onclick="show('login')">Lecturer / Admin</button>
 </div>
 
 <section id="student" class="card">
@@ -54,165 +58,490 @@ label{font-weight:bold}
 
 <button type="submit">Submit Attendance</button>
 </form>
-<p class="small">Please provide correct information and your own photograph.</p>
+<p class="small">Submit only your own details and photograph.</p>
 </section>
 
-<section id="lecturer" class="card hidden">
-<h2>Lecturer Access</h2>
-<label>Lecturer's full name</label>
-<input id="lecturerName" placeholder="Enter lecturer name">
-<button onclick="enterLecturer()">Open Dashboard</button>
+<section id="login" class="card hidden">
+<h2>Secure Login</h2>
+<form id="loginForm">
+<label>Email address</label>
+<input id="loginEmail" type="email" required placeholder="Email">
+
+<label>Password</label>
+<input id="loginPassword" type="password" required placeholder="Password">
+
+<button type="submit">Login</button>
+</form>
+<p class="small">Only approved lecturers and the administrator can access the dashboard.</p>
 </section>
 
 <section id="dashboard" class="card hidden">
-<h2>Lecturer Dashboard</h2>
+<h2 id="dashboardTitle">Dashboard</h2>
 <p id="welcome"></p>
+
+<div id="adminTools" class="hidden">
+<h3>Register lecturer profile</h3>
+<p class="small">First create the lecturer's email and password in Firebase Authentication. Then enter their Authentication UID below.</p>
+<label>Lecturer Authentication UID</label>
+<input id="newLecturerUid" placeholder="Paste lecturer UID">
+
+<label>Lecturer email</label>
+<input id="newLecturerEmail" type="email" placeholder="Lecturer email">
+
+<button onclick="addLecturer()">Add lecturer profile</button>
+
+<h3>Lecturer accounts awaiting approval</h3>
+<div id="lecturers"></div>
+<hr>
+</div>
+
+<h3>Attendance records</h3>
 <label>Select attendance date</label>
 <input type="date" id="attendanceDate">
-<div id="records"></div>
+
+<div id="records">Loading records...</div>
 <button class="blue" onclick="exportCSV()">Download Attendance CSV</button>
-<button class="gray" onclick="show('lecturer')">Back</button>
+<button class="gray" onclick="logout()">Logout</button>
 </section>
+
 </main>
 
-<script>
-const KEY="JSA_ATTENDANCE_V1";
-let currentLecturer="";
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
-function getRecords(){
- return JSON.parse(localStorage.getItem(KEY)||"[]");
-}
-function saveRecords(data){
- localStorage.setItem(KEY,JSON.stringify(data));
-}
-function show(id){
- ["student","lecturer","dashboard"].forEach(x=>
+import {
+ getAuth,
+ signInWithEmailAndPassword,
+ onAuthStateChanged,
+ signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+ getFirestore,
+ collection,
+ doc,
+ getDocs,
+ setDoc,
+ updateDoc
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyAWo04Nta8TH-i-kWvIU232r4fuDUbvonA",
+ authDomain: "jsa-6f63c.firebaseapp.com",
+ projectId: "jsa-6f63c",
+ storageBucket: "jsa-6f63c.firebasestorage.app",
+ messagingSenderId: "979074445552",
+ appId: "1:979074445552:web:0e4426df835fe015f1d235",
+ measurementId: "G-3MHJHG6TC4"
+};
+
+const ADMIN_UID = "xX2v7CNcC6e5uXWDErGa0SiQ6yr1";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let currentRole = "";
+let attendanceRecords = [];
+
+document.getElementById("connection").textContent =
+"Firebase connection initialized";
+
+window.show = function(id) {
+ ["student","login","dashboard"].forEach(x =>
  document.getElementById(x).classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
-}
-document.getElementById("attendanceDate").value=
- new Date().toISOString().slice(0,10);
+};
 
-async function resizePhoto(file){
- return new Promise((resolve,reject)=>{
- const reader=new FileReader();
- reader.onload=()=>{
- const img=new Image();
- img.onload=()=>{
- const canvas=document.createElement("canvas");
- const scale=Math.min(480/img.width,480/img.height,1);
- canvas.width=img.width*scale;
- canvas.height=img.height*scale;
- canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
- resolve(canvas.toDataURL("image/jpeg",0.65));
+function today() {
+ const d = new Date();
+ return d.getFullYear()+"-"+
+ String(d.getMonth()+1).padStart(2,"0")+"-"+
+ String(d.getDate()).padStart(2,"0");
+}
+
+document.getElementById("attendanceDate").value = today();
+
+function resizePhoto(file) {
+ return new Promise((resolve,reject) => {
+ const reader = new FileReader();
+
+ reader.onload = () => {
+ const img = new Image();
+
+ img.onload = () => {
+ const canvas = document.createElement("canvas");
+ const scale = Math.min(360/img.width,360/img.height,1);
+
+ canvas.width = img.width*scale;
+ canvas.height = img.height*scale;
+
+ canvas.getContext("2d").drawImage(
+ img,0,0,canvas.width,canvas.height
+ );
+
+ resolve(canvas.toDataURL("image/jpeg",0.4));
  };
- img.onerror=reject;
- img.src=reader.result;
+
+ img.onerror = reject;
+ img.src = reader.result;
  };
- reader.onerror=reject;
+
+ reader.onerror = reject;
  reader.readAsDataURL(file);
  });
 }
 
-document.getElementById("studentForm").addEventListener("submit",async e=>{
+// STUDENT ATTENDANCE
+document.getElementById("studentForm").addEventListener(
+"submit",async e => {
  e.preventDefault();
- const name=document.getElementById("fullname").value.trim();
- const reg=document.getElementById("regno").value.trim();
- const file=document.getElementById("selfie").files[0];
- if(!file){alert("Please take your selfie.");return;}
- try{
- const photo=await resizePhoto(file);
- const records=getRecords();
- const date=new Date().toLocaleDateString("en-CA");
- if(records.some(r=>r.reg.toLowerCase()===reg.toLowerCase()&&r.date===date)){
- alert("This registration number has already submitted attendance today.");
+
+ const name = document.getElementById("fullname").value.trim();
+ const reg = document.getElementById("regno").value.trim();
+ const file = document.getElementById("selfie").files[0];
+
+ if(!file) {
+ alert("Please take your selfie.");
  return;
  }
- records.push({
- id:Date.now(),name,reg,photo,date,
- lecturer:"",status:"Pending",
- submitted:new Date().toLocaleTimeString()
+
+ try {
+ const photo = await resizePhoto(file);
+
+ if(photo.length >= 700000) {
+ alert("Your photo is too large. Please use a smaller photo.");
+ return;
+ }
+
+ const date = today();
+ const safeReg = reg.toLowerCase().replace(/[^a-z0-9]/g,"_");
+ const recordId = safeReg+"_"+date;
+
+ await setDoc(doc(db,"attendance",recordId),{
+ name,
+ reg,
+ photo,
+ date,
+ submitted:new Date().toLocaleTimeString(),
+ status:"Pending",
+ lecturer:""
  });
- saveRecords(records);
+
  alert("Attendance submitted successfully!");
  e.target.reset();
- }catch(err){alert("Could not process the selfie. Please try again.");}
+
+ } catch(error) {
+ console.error(error);
+ if(error.code === "permission-denied") {
+ alert("Submission was blocked by database security rules.");
+ } else {
+ alert("Submission failed. Please check your internet connection and try again.");
+ }
+ }
 });
 
-function enterLecturer(){
- currentLecturer=document.getElementById("lecturerName").value.trim();
- if(!currentLecturer){alert("Enter lecturer name.");return;}
- document.getElementById("welcome").textContent="Lecturer: "+currentLecturer;
- show("dashboard");
- renderRecords();
-}
+// LOGIN
+document.getElementById("loginForm").addEventListener(
+"submit",async e => {
+ e.preventDefault();
 
-document.getElementById("attendanceDate").addEventListener("change",renderRecords);
+ const email = document.getElementById("loginEmail").value.trim();
+ const password = document.getElementById("loginPassword").value;
 
-function renderRecords(){
- const date=document.getElementById("attendanceDate").value;
- const records=getRecords().filter(r=>r.date===date);
- const area=document.getElementById("records");
- area.innerHTML="<h3>Student submissions: "+records.length+"</h3>";
- if(!records.length){
- area.innerHTML+="<p>No student submissions for this date.</p>";
+ try {
+ await signInWithEmailAndPassword(auth,email,password);
+ } catch(error) {
+ console.error(error);
+ alert("Login failed. Check your email and password.");
+ }
+});
+
+// CHECK ACCOUNT ROLE
+onAuthStateChanged(auth,async user => {
+ currentUser = user;
+
+ if(!user) {
+ currentRole = "";
  return;
  }
- records.forEach(r=>{
- const div=document.createElement("div");
- div.className="student";
- const img=document.createElement("img");
- img.src=r.photo;
- img.alt="Student selfie";
- const details=document.createElement("div");
- details.innerHTML="<strong>"+escapeHTML(r.name)+"</strong><br>"+
- escapeHTML(r.reg)+"<br><span class='small'>Submitted: "+
- escapeHTML(r.submitted)+"</span><br><span class='status'>"+
- escapeHTML(r.status)+"</span>";
- const present=document.createElement("button");
- present.textContent="Present";
- present.onclick=()=>mark(r.id,"Present");
- const absent=document.createElement("button");
- absent.textContent="Absent";
- absent.className="gray";
- absent.onclick=()=>mark(r.id,"Absent");
- div.append(img,details,present,absent);
+
+ try {
+ if(user.uid === ADMIN_UID) {
+ currentRole = "admin";
+ openDashboard();
+ return;
+ }
+
+ const { getDoc } = await import(
+ "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"
+ );
+
+ const profile = await getDoc(doc(db,"users",user.uid));
+
+ if(!profile.exists() ||
+ profile.data().role !== "lecturer" ||
+ profile.data().approved !== true) {
+
+ alert("Your lecturer account has not been approved.");
+ await signOut(auth);
+ return;
+ }
+
+ currentRole = "lecturer";
+ openDashboard();
+
+ } catch(error) {
+ console.error(error);
+ alert("Could not verify your account.");
+ await signOut(auth);
+ }
+});
+
+async function openDashboard() {
+ show("dashboard");
+
+ document.getElementById("welcome").textContent =
+ "Signed in as "+currentUser.email;
+
+ if(currentRole === "admin") {
+ document.getElementById("dashboardTitle").textContent =
+ "Super Administrator Dashboard";
+
+ document.getElementById("adminTools").classList.remove("hidden");
+ await loadLecturers();
+
+ } else {
+ document.getElementById("dashboardTitle").textContent =
+ "Lecturer Dashboard";
+
+ document.getElementById("adminTools").classList.add("hidden");
+ }
+
+ await loadRecords();
+}
+
+// ADMIN: ADD LECTURER PROFILE
+window.addLecturer = async function() {
+ if(currentRole !== "admin") return;
+
+ const uid = document.getElementById("newLecturerUid").value.trim();
+ const email = document.getElementById("newLecturerEmail").value.trim();
+
+ if(!uid || !email) {
+ alert("Enter the lecturer UID and email.");
+ return;
+ }
+
+ try {
+ await setDoc(doc(db,"users",uid),{
+ email,
+ role:"lecturer",
+ approved:false
+ });
+
+ alert("Lecturer profile added. Awaiting approval.");
+ document.getElementById("newLecturerUid").value = "";
+ document.getElementById("newLecturerEmail").value = "";
+
+ await loadLecturers();
+
+ } catch(error) {
+ console.error(error);
+ alert("Could not add lecturer profile.");
+ }
+};
+
+// ADMIN: APPROVE LECTURERS
+async function loadLecturers() {
+ if(currentRole !== "admin") return;
+
+ const area = document.getElementById("lecturers");
+ area.textContent = "Loading lecturer accounts...";
+
+ try {
+ const snapshot = await getDocs(collection(db,"users"));
+ area.innerHTML = "";
+
+ snapshot.forEach(item => {
+ const data = item.data();
+
+ if(data.role !== "lecturer") return;
+
+ const div = document.createElement("div");
+ div.className = "student";
+
+ const info = document.createElement("p");
+ info.textContent = data.email+" — "+
+ (data.approved ? "Approved" : "Pending approval");
+
+ div.append(info);
+
+ if(!data.approved) {
+ const button = document.createElement("button");
+ button.textContent = "Approve lecturer";
+
+ button.onclick = async () => {
+ try {
+ await updateDoc(doc(db,"users",item.id),{
+ approved:true
+ });
+ alert("Lecturer approved.");
+ await loadLecturers();
+ } catch(error) {
+ alert("Approval failed.");
+ }
+ };
+
+ div.append(button);
+ }
+
+ area.append(div);
+ });
+
+ } catch(error) {
+ console.error(error);
+ area.textContent = "Could not load lecturer accounts.";
+ }
+}
+
+// LOAD ATTENDANCE
+document.getElementById("attendanceDate").addEventListener(
+"change",loadRecords
+);
+
+async function loadRecords() {
+ const area = document.getElementById("records");
+ area.textContent = "Loading attendance...";
+
+ try {
+ const snapshot = await getDocs(collection(db,"attendance"));
+ const date = document.getElementById("attendanceDate").value;
+
+ attendanceRecords = [];
+
+ snapshot.forEach(item => {
+ const data = item.data();
+
+ if(data.date === date) {
+ attendanceRecords.push({
+ id:item.id,
+ ...data
+ });
+ }
+ });
+
+ renderRecords();
+
+ } catch(error) {
+ console.error(error);
+ area.textContent = "Could not load attendance records.";
+ }
+}
+
+function renderRecords() {
+ const area = document.getElementById("records");
+ area.innerHTML = "";
+
+ const heading = document.createElement("h3");
+ heading.textContent =
+ "Student submissions: "+attendanceRecords.length;
+
+ area.append(heading);
+
+ if(!attendanceRecords.length) {
+ area.append(document.createTextNode(
+ "No student submissions for this date."
+ ));
+ return;
+ }
+
+ attendanceRecords.forEach(r => {
+ const div = document.createElement("div");
+ div.className = "student";
+
+ const img = document.createElement("img");
+ img.src = r.photo;
+ img.alt = "Student selfie";
+
+ const details = document.createElement("p");
+ details.textContent =
+ r.name+" | "+r.reg+" | "+r.submitted+
+ " | Status: "+r.status;
+
+ div.append(img,details);
+
+ if(currentRole === "admin" || currentRole === "lecturer") {
+ const present = document.createElement("button");
+ present.textContent = "Present";
+ present.onclick = () => mark(r.id,"Present");
+
+ const absent = document.createElement("button");
+ absent.textContent = "Absent";
+ absent.className = "gray";
+ absent.onclick = () => mark(r.id,"Absent");
+
+ div.append(present,absent);
+ }
+
  area.append(div);
  });
 }
 
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",
- '"':"&quot;","'":"&#39;"
- })[c]);
-}
-
-function mark(id,status){
- const records=getRecords();
- const record=records.find(r=>r.id===id);
- if(!record)return;
- record.status=status;
- record.lecturer=currentLecturer;
- saveRecords(records);
- renderRecords();
-}
-
-function exportCSV(){
- const date=document.getElementById("attendanceDate").value;
- const rows=[["Full name","Registration number","Date","Time","Status","Lecturer"]];
- getRecords().filter(r=>r.date===date).forEach(r=>{
- rows.push([r.name,r.reg,r.date,r.submitted,r.status,r.lecturer]);
+// MARK ATTENDANCE
+async function mark(id,status) {
+ try {
+ await updateDoc(doc(db,"attendance",id),{
+ status,
+ lecturer:currentUser.email
  });
- const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
- const blob=new Blob([csv],{type:"text/csv"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download="JSA-attendance-"+date+".csv";
- a.click();
- URL.revokeObjectURL(url);
+
+ await loadRecords();
+
+ } catch(error) {
+ console.error(error);
+ alert("Could not update attendance.");
+ }
 }
+
+// CSV EXPORT
+window.exportCSV = function() {
+ const rows = [
+ ["Full name","Registration number","Date",
+ "Time","Status","Lecturer"]
+ ];
+
+ attendanceRecords.forEach(r => {
+ rows.push([
+ r.name,r.reg,r.date,r.submitted,r.status,r.lecturer
+ ]);
+ });
+
+ const csv = rows.map(row =>
+ row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"')
+ .join(",")
+ ).join("\n");
+
+ const blob = new Blob([csv],{type:"text/csv"});
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement("a");
+
+ a.href = url;
+ a.download = "JSA-attendance-"+today()+".csv";
+ a.click();
+
+ URL.revokeObjectURL(url);
+};
+
+// LOGOUT
+window.logout = async function() {
+ await signOut(auth);
+ currentRole = "";
+ show("login");
+};
+
 </script>
 </body>
 </html>
