@@ -1,4 +1,4 @@
-```html
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,403 +6,1286 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#123b63">
 <title>JSA | Jerry Smart Attendance</title>
+
 <style>
-:root{--navy:#123b63;--green:#087f70;--gold:#e8b44c;--bg:#f3f6fa;--ink:#19324a;--muted:#687b8d;--line:#e1e8ef;--white:#fff;--red:#b83232;--shadow:0 8px 28px #123b6310}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,sans-serif}
-header{background:linear-gradient(120deg,var(--navy),var(--green));color:white;padding:24px 18px}
-.top{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.brand h1{margin:0;font-size:30px;letter-spacing:2px}.brand p{margin:5px 0 0;color:#e5f3f1}
-#connection{font-size:12px;color:#e5f3f1}
-main{max-width:1100px;margin:24px auto;padding:0 16px 40px}
-.card{background:white;border:1px solid var(--line);border-radius:16px;padding:22px;margin:0 0 18px;box-shadow:var(--shadow)}
-h2,h3{margin-top:0;color:var(--navy)}h2{font-size:22px}h3{font-size:17px}
-button,.button{border:0;border-radius:9px;padding:12px 16px;background:var(--green);color:white;font-weight:700;cursor:pointer;margin:4px 4px 4px 0}
-button:hover{filter:brightness(.94)}button:disabled{opacity:.55;cursor:not-allowed}
-.blue{background:var(--navy)}.gold{background:#b78018}.gray{background:#687b8d}.red{background:var(--red)}.light{background:#eaf2f7;color:var(--navy)}
-input,select{width:100%;padding:12px;margin:7px 0 15px;border:1px solid #cbd7e1;border-radius:9px;font-size:15px;background:#fff;color:var(--ink)}
-label{font-weight:700;font-size:13px;color:var(--navy)}
-.small{font-size:12px;color:var(--muted);line-height:1.5}.hidden{display:none!important}
-.tabs,.actions{display:flex;gap:8px;flex-wrap:wrap}.tabs button{flex:1;min-width:130px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-.stat{padding:17px;border-radius:13px;background:#edf5f7;border:1px solid #dce9ed}.stat strong{display:block;font-size:25px;color:var(--green);margin-top:7px}
-.profile{display:flex;gap:18px;align-items:center;flex-wrap:wrap}.avatar{width:112px;height:112px;border-radius:50%;object-fit:cover;border:4px solid #e6f0ef;background:#edf2f5}.profile-meta{flex:1;min-width:180px}
-.item{border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
-.item img{width:88px;height:88px;object-fit:cover;border-radius:10px;background:#edf2f5}
-.item-body{flex:1;min-width:180px}.pill{display:inline-block;padding:5px 9px;border-radius:30px;background:#e8f4ef;color:#08745f;font-size:12px;font-weight:bold}
-.notice{padding:12px;border-radius:10px;background:#edf5fa;margin:12px 0;color:#31516b}
-hr{border:0;border-top:1px solid var(--line);margin:20px 0}
-@media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.card{padding:17px}.brand h1{font-size:26px}}
+:root {
+ --navy:#123b63;
+ --green:#087f70;
+ --gold:#e8b44c;
+ --bg:#f3f6fa;
+ --ink:#19324a;
+ --muted:#687b8d;
+ --line:#e1e8ef;
+ --red:#b83232;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,sans-serif}
+header{background:linear-gradient(120deg,var(--navy),var(--green));color:white;padding:22px 16px}
+.top,main{max-width:1100px;margin:auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand h1{margin:0;font-size:30px;letter-spacing:2px}
+.brand p{margin:5px 0 0;color:#e5f3f1}
+#connection{font-size:12px}
+main{padding:22px 15px 40px}
+.card{background:white;border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:17px;box-shadow:0 8px 28px #123b6310}
+h2,h3{color:var(--navy);margin-top:0}
+h2{font-size:22px}
+h3{font-size:17px}
+button{border:0;border-radius:9px;padding:12px 15px;background:var(--green);color:white;font-weight:bold;cursor:pointer;margin:4px}
+button:disabled{opacity:.5}
+.blue{background:var(--navy)}
+.gray{background:#687b8d}
+.red{background:var(--red)}
+.light{background:#eaf2f7;color:var(--navy)}
+input,select{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #cbd7e1;border-radius:9px;font-size:15px;background:white;color:var(--ink)}
+label{font-weight:bold;font-size:13px;color:var(--navy)}
+.small{font-size:12px;color:var(--muted);line-height:1.5}
+.hidden{display:none!important}
+.tabs,.actions{display:flex;gap:8px;flex-wrap:wrap}
+.tabs button{flex:1;min-width:130px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.stat{padding:15px;border-radius:12px;background:#edf5f7;border:1px solid #dce9ed}
+.stat strong{display:block;font-size:24px;color:var(--green);margin-top:6px}
+.profile{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.avatar{width:105px;height:105px;border-radius:50%;object-fit:cover;border:4px solid #e6f0ef;background:#edf2f5}
+.item{border:1px solid var(--line);border-radius:12px;padding:13px;margin:11px 0;display:flex;gap:13px;align-items:flex-start;flex-wrap:wrap}
+.item img{width:88px;height:88px;object-fit:cover;border-radius:9px}
+.item-body{flex:1;min-width:180px}
+.pill{display:inline-block;padding:5px 9px;border-radius:30px;background:#e8f4ef;color:#08745f;font-size:12px;font-weight:bold}
+hr{border:0;border-top:1px solid var(--line);margin:19px 0}
+@media(max-width:600px){
+.top{align-items:flex-start;flex-direction:column}
+.card{padding:16px}
+.brand h1{font-size:26px}
+}
 </style>
 </head>
+
 <body>
-<header><div class="top"><div class="brand"><h1>JSA</h1><p>Jerry Smart Attendance Management System</p></div><div id="connection">Connecting to Firebase…</div></div></header>
+
+<header>
+<div class="top">
+<div class="brand">
+<h1>JSA</h1>
+<p>Jerry Smart Attendance Management System</p>
+</div>
+<div id="connection">Connecting to Firebase...</div>
+</div>
+</header>
+
 <main>
+
 <div class="tabs" id="mainTabs">
 <button onclick="showPanel('studentPanel')">Student</button>
 <button class="blue" onclick="showPanel('staffPanel')">Lecturer / Admin</button>
 </div>
 
+<!-- STUDENT PORTAL -->
+
 <section id="studentPanel" class="card">
-<h2>Student portal</h2>
-<p class="small">Sign in using the student account issued to you. Your profile photograph must be uploaded by you from your own account.</p>
+
+<h2>Student login</h2>
+
 <form id="studentLoginForm">
-<label>Email address</label><input id="studentEmail" type="email" required autocomplete="username" placeholder="Student email">
-<label>Password</label><input id="studentPassword" type="password" required autocomplete="current-password" placeholder="Password">
-<button type="submit">Student login</button>
+
+<label>Registration number</label>
+<input id="studentLoginReg" required placeholder="Enter your registration number">
+
+<label>Password</label>
+<input id="studentLoginPassword" type="password" required placeholder="Enter your password">
+
+<button type="submit">Login</button>
+
 </form>
+
 <hr>
-<h3>New student? Create your account</h3>
-<p class="small">Students do not need to enter a Firebase UID. Create your account using your own details; JSA and Firebase handle the internal account ID automatically. Your account will be available after administrator approval.</p>
+
+<h3>New student? Register here</h3>
+
 <form id="studentRegisterForm">
-<label>Full name</label><input id="registerStudentName" required maxlength="100" placeholder="Your full name">
-<label>Registration number</label><input id="registerStudentReg" required maxlength="50" placeholder="Your university registration number">
-<label>Email address</label><input id="registerStudentEmail" type="email" required autocomplete="email" placeholder="Your email">
-<label>Create password</label><input id="registerStudentPassword" type="password" minlength="6" required autocomplete="new-password" placeholder="At least 6 characters">
-<button type="submit" class="blue">Create student account</button>
+
+<label>Full name</label>
+<input id="regName" required placeholder="Enter your full name">
+
+<label>Registration number</label>
+<input id="regNumber" required placeholder="Enter your registration number">
+
+<label>Create password</label>
+<input id="regPassword" type="password" required minlength="6" placeholder="At least 6 characters">
+
+<button class="blue" type="submit">Register as a student</button>
+
 </form>
 </section>
+
+<!-- STAFF PORTAL -->
 
 <section id="staffPanel" class="card hidden">
+
 <h2>Lecturer / Administrator login</h2>
+
 <form id="staffLoginForm">
-<label>Email address</label><input id="staffEmail" type="email" required autocomplete="username" placeholder="Email">
-<label>Password</label><input id="staffPassword" type="password" required autocomplete="current-password" placeholder="Password">
+
+<label>Email address</label>
+<input id="staffEmail" type="email" required placeholder="Enter staff email">
+
+<label>Password</label>
+<input id="staffPassword" type="password" required placeholder="Enter password">
+
 <button class="blue" type="submit">Login</button>
+
 </form>
 </section>
 
+<!-- DASHBOARD -->
+
 <section id="dashboard" class="hidden">
+
 <div class="card">
+
 <div class="profile">
-<img id="profileImage" class="avatar" alt="Your profile photograph">
-<div class="profile-meta"><h2 id="dashboardTitle">Dashboard</h2><div id="welcome"></div><span id="roleBadge" class="pill"></span></div>
+
+<img id="profileImage" class="avatar" alt="Profile photograph">
+
+<div>
+<h2 id="dashboardTitle">Dashboard</h2>
+<div id="welcome"></div>
+<span id="roleBadge" class="pill"></span>
 </div>
+
+</div>
+
 <hr>
-<h3>Your profile photograph</h3>
-<p class="small">Choose a photograph of yourself. JSA does not provide stock photos or other people's profile pictures. The image you upload will be used as your account photograph.</p>
-<label>Upload your own profile photograph</label><input id="profileFile" type="file" accept="image/jpeg,image/png,image/webp">
-<button id="saveProfilePhoto">Save my profile photograph</button>
+
+<h3>Profile photograph</h3>
+
+<label>Upload your photograph</label>
+<input id="profileFile" type="file" accept="image/jpeg,image/png,image/webp">
+
+<button id="saveProfilePhoto">Save profile photograph</button>
+
 </div>
+
+<!-- ADMIN PANEL -->
 
 <div id="adminPanel" class="card hidden">
-<h2>Super administrator controls</h2>
+
+<h2>Administrator controls</h2>
+
 <div class="grid">
-<div class="stat">Registered accounts<strong id="accountCount">—</strong></div>
-<div class="stat">Attendance submissions<strong id="attendanceCount">—</strong></div>
-<div class="stat">Uploaded documents<strong id="documentCount">—</strong></div>
+
+<div class="stat">
+Registered accounts
+<strong id="accountCount">—</strong>
 </div>
+
+<div class="stat">
+Attendance submissions
+<strong id="attendanceCount">—</strong>
+</div>
+
+<div class="stat">
+Documents
+<strong id="documentCount">—</strong>
+</div>
+
+</div>
+
 <hr>
-<h3>Create a user profile</h3>
-<p class="small">This UID field is only for lecturer accounts. First create the lecturer's email/password in Firebase Authentication, then enter the lecturer's Authentication UID. Students register themselves using the student portal and do not need to provide a UID.</p>
-<label>Lecturer Authentication UID</label><input id="newUid" placeholder="Lecturer Firebase Authentication UID">
-<label>Lecturer email</label><input id="newEmail" type="email" placeholder="Lecturer email address">
-<label>Lecturer full name</label><input id="newName" placeholder="Lecturer full name">
-<label>Staff number (optional)</label><input id="newNumber" placeholder="Lecturer staff number">
-<button id="createProfile">Create pending lecturer profile</button>
-<h3>Accounts and approvals</h3><div id="userList">Loading…</div>
+
+<h3>Create lecturer profile</h3>
+
+<label>Lecturer Authentication UID</label>
+<input id="newUid" placeholder="Lecturer UID">
+
+<label>Lecturer email</label>
+<input id="newEmail" type="email" placeholder="Lecturer email">
+
+<label>Lecturer full name</label>
+<input id="newName" placeholder="Lecturer full name">
+
+<label>Staff number</label>
+<input id="newNumber" placeholder="Staff number">
+
+<button id="createProfile">Create lecturer profile</button>
+
+<hr>
+
+<h3>Student and lecturer registrations</h3>
+
+<div id="userList">Loading...</div>
+
 </div>
 
+<!-- ATTENDANCE -->
+
 <div class="card">
-<h2 id="workspaceTitle">My attendance</h2>
+
+<h2 id="workspaceTitle">Attendance</h2>
+
 <div id="studentAttendanceTools" class="hidden">
+
 <form id="attendanceForm">
-<label>Full name</label><input id="attendanceName" required placeholder="Your full name">
-<label>Registration number</label><input id="attendanceReg" required placeholder="Your university registration number">
-<label>Take or upload your own selfie as attendance proof</label><input id="attendancePhoto" type="file" accept="image/jpeg,image/png,image/webp" capture="user" required>
-<button type="submit">Submit today's attendance</button>
+
+<label>Registration number</label>
+<input id="attendanceReg" required placeholder="Enter your registration number">
+
+<label>Take your selfie</label>
+<input id="attendancePhoto" type="file" accept="image/*" capture="user" required>
+
+<button type="submit">Submit attendance</button>
+
 </form>
-</div>
-<div id="lecturerTools" class="hidden">
-<label>Attendance date</label><input type="date" id="attendanceDate">
-</div>
-<div id="attendanceRecords">Loading records…</div>
-<button class="blue" id="exportCsv">Download attendance CSV</button>
+
 </div>
 
-<div class="card">
-<h2>Documents</h2>
-<p class="small">Upload your own PDF or Word document. Only the account owner and administrator can delete a document. Do not upload photographs of other people.</p>
-<form id="documentForm">
-<label>Document title</label><input id="documentTitle" required maxlength="100" placeholder="Document title">
-<label>Select PDF or Word document</label><input id="documentFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
-<button type="submit">Upload my document</button>
-</form>
-<div id="documentList">Loading documents…</div>
+<div id="lecturerTools" class="hidden">
+
+<label>Attendance date</label>
+<input type="date" id="attendanceDate">
+
 </div>
-<div class="actions"><button class="gray" id="logoutButton">Logout</button></div>
+
+<div id="attendanceRecords">Loading attendance...</div>
+
+<button class="blue" id="exportCsv">Download attendance CSV</button>
+
+</div>
+
+<!-- DOCUMENTS -->
+
+<div class="card">
+
+<h2>Documents</h2>
+
+<form id="documentForm">
+
+<label>Document title</label>
+<input id="documentTitle" required placeholder="Document title">
+
+<label>PDF or Word document</label>
+<input id="documentFile" type="file" accept=".pdf,.doc,.docx" required>
+
+<button type="submit">Upload document</button>
+
+</form>
+
+<div id="documentList">Loading documents...</div>
+
+</div>
+
+<button class="gray" id="logoutButton">Logout</button>
+
 </section>
 </main>
 
 <script type="module">
+
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import {getFirestore,collection,doc,getDoc,getDocs,setDoc,updateDoc,deleteDoc,query,where,serverTimestamp,addDoc} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import {getStorage,ref,uploadBytes,getDownloadURL,deleteObject} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signInWithEmailAndPassword,
+createUserWithEmailAndPassword,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+doc,
+getDoc,
+getDocs,
+setDoc,
+updateDoc,
+deleteDoc,
+query,
+where,
+serverTimestamp,
+addDoc,
+runTransaction
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL,
+deleteObject
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 
 const firebaseConfig={
- apiKey:"AIzaSyAWo04Nta8TH-i-kWvIU232r4fuDUbvonA",
- authDomain:"jsa-6f63c.firebaseapp.com",
- projectId:"jsa-6f63c",
- storageBucket:"jsa-6f63c.firebasestorage.app",
- messagingSenderId:"979074445552",
- appId:"1:979074445552:web:0e4426df835fe015f1d235",
- measurementId:"G-3MHJHG6TC4"
+
+apiKey:"AIzaSyAWo04Nta8TH-i-kWvIU232r4fuDUbvonA",
+authDomain:"jsa-6f63c.firebaseapp.com",
+projectId:"jsa-6f63c",
+storageBucket:"jsa-6f63c.firebasestorage.app",
+messagingSenderId:"979074445552",
+appId:"1:979074445552:web:0e4426df835fe015f1d235",
+measurementId:"G-3MHJHG6TC4"
+
 };
+
 const ADMIN_UID="xX2v7CNcC6e5uXWDErGa0SiQ6yr1";
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
-let currentUser=null,currentProfile=null,currentRole="",attendanceRows=[],studentRegistrationInProgress=false;
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const storage=getStorage(app);
+
+let currentUser=null;
+let currentProfile=null;
+let currentRole="";
+let attendanceRows=[];
 
 const $=id=>document.getElementById(id);
-const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
-$("connection").textContent="Firebase app initialized";
+
+const today=()=>{
+const d=new Date();
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
+
+const cleanReg=s=>s.trim().toUpperCase().replace(/\s+/g,"");
+
+const studentEmail=reg=>
+`${encodeURIComponent(cleanReg(reg)).replace(/%/g,"_")}@students.jsa-login.com`;
+
+const validImage=f=>
+f&&["image/jpeg","image/png","image/webp"].includes(f.type)&&f.size<=5*1024*1024;
+
+const fileExt=f=>(f.name.split(".").pop()||"").toLowerCase();
+
+$("connection").textContent="Firebase connected";
 $("attendanceDate").value=today();
 
-window.showPanel=id=>{["studentPanel","staffPanel"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden")};
-function showDashboard(){ $("mainTabs").classList.add("hidden");$("studentPanel").classList.add("hidden");$("staffPanel").classList.add("hidden");$("dashboard").classList.remove("hidden");}
-function safeText(el,value){el.textContent=value??""}
-function fileExt(file){return (file.name.split(".").pop()||"").toLowerCase()}
-function validImage(file){return file && ["image/jpeg","image/png","image/webp"].includes(file.type) && file.size<=5*1024*1024}
-function escapeText(s){return String(s??"")}
+window.showPanel=id=>{
+["studentPanel","staffPanel"].forEach(x=>$(x).classList.add("hidden"));
+$(id).classList.remove("hidden");
+};
+
+function showDashboard(){
+$("mainTabs").classList.add("hidden");
+$("studentPanel").classList.add("hidden");
+$("staffPanel").classList.add("hidden");
+$("dashboard").classList.remove("hidden");
+}
+
 async function audit(action,target,details=""){
- if(!currentUser)return;
- try{await addDoc(collection(db,"auditLogs"),{actorUid:currentUser.uid,actorEmail:currentUser.email,action,target,details,createdAt:serverTimestamp()})}catch(e){console.warn("Audit log unavailable",e)}
+if(!currentUser)return;
+try{
+await addDoc(collection(db,"auditLogs"),{
+actorUid:currentUser.uid,
+actorEmail:currentUser.email,
+action,target,details,
+createdAt:serverTimestamp()
+});
+}catch(e){console.warn(e)}
 }
-async function signIn(form,emailId,passwordId,expectedRole){
- form.addEventListener("submit",async e=>{
-  e.preventDefault();
-  try{await signInWithEmailAndPassword(auth,$(emailId).value.trim(),$(passwordId).value)}
-  catch(err){console.error(err);alert("Login failed. Check your email and password.");}
- });
+
+async function login(form,emailFn,passwordId){
+
+form.addEventListener("submit",async e=>{
+e.preventDefault();
+
+try{
+await signInWithEmailAndPassword(
+auth,emailFn(),$(passwordId).value
+);
+}catch(err){
+console.error(err);
+alert("Login failed. Check your details.");
 }
-signIn($("studentLoginForm"),"studentEmail","studentPassword","student");
-signIn($("staffLoginForm"),"staffEmail","staffPassword","staff");
+
+});
+
+}
+
+login(
+$("studentLoginForm"),
+()=>$("studentLoginReg").value,
+"studentLoginPassword"
+);
+
+login(
+$("staffLoginForm"),
+()=>$("staffEmail").value.trim(),
+"staffPassword"
+);
+
+// STUDENT REGISTRATION
 
 $("studentRegisterForm").addEventListener("submit",async e=>{
- e.preventDefault();
- const fullName=$("registerStudentName").value.trim();
- const registrationNumber=$("registerStudentReg").value.trim();
- const email=$("registerStudentEmail").value.trim();
- const password=$("registerStudentPassword").value;
- if(!fullName||!registrationNumber||!email||password.length<6){alert("Complete all fields. Password must contain at least 6 characters.");return}
- studentRegistrationInProgress=true;
- try{
-  const credential=await createUserWithEmailAndPassword(auth,email,password);
-  // Firebase generates the UID automatically. Students never enter or need to know it.
-  await setDoc(doc(db,"users",credential.user.uid),{
-   email,fullName,registrationNumber,role:"student",approved:false,photoURL:"",createdAt:serverTimestamp()
-  });
-  $("studentRegisterForm").reset();
-  await signOut(auth);
-  alert("Student account created. Please wait for administrator approval before logging in.");
- }catch(err){
-  console.error(err);
-  alert(err.code==="auth/email-already-in-use"?"This email already has an account. Please log in.":"Could not create student account. If the account was created, contact the administrator to complete profile approval.");
- }finally{
-  studentRegistrationInProgress=false;
- }
+
+e.preventDefault();
+
+const fullName=$("regName").value.trim();
+const registrationNumber=cleanReg($("regNumber").value);
+const password=$("regPassword").value;
+const email=studentEmail(registrationNumber);
+
+if(!fullName||!registrationNumber||password.length<6){
+alert("Complete all fields. Password must have at least 6 characters.");
+return;
+}
+
+try{
+
+const refUser=doc(db,"studentRegistrationNumbers",registrationNumber);
+
+await runTransaction(db,async tx=>{
+
+const existing=await tx.get(refUser);
+
+if(existing.exists())throw new Error("REG_EXISTS");
+
+tx.set(refUser,{
+registrationNumber,
+createdAt:serverTimestamp()
 });
+
+});
+
+let credential;
+
+try{
+credential=await createUserWithEmailAndPassword(auth,email,password);
+}catch(err){
+await deleteDoc(refUser);
+throw err;
+}
+
+await setDoc(doc(db,"users",credential.user.uid),{
+
+email,
+fullName,
+registrationNumber,
+role:"student",
+approved:false,
+photoURL:"",
+createdAt:serverTimestamp()
+
+});
+
+await signOut(auth);
+
+$("studentRegisterForm").reset();
+
+alert("Registration submitted. Wait for administrator approval.");
+
+}catch(err){
+
+console.error(err);
+
+alert(
+err.message==="REG_EXISTS"
+?"This registration number is already registered."
+:"Registration failed. Contact the administrator if the problem continues."
+);
+
+}
+
+});
+
+// AUTHENTICATION
 
 onAuthStateChanged(auth,async user=>{
- if(studentRegistrationInProgress)return;
- currentUser=user;currentProfile=null;currentRole="";
- if(!user){$("dashboard").classList.add("hidden");$("mainTabs").classList.remove("hidden");return}
- try{
-  if(user.uid===ADMIN_UID){currentRole="admin";currentProfile={fullName:"Super Administrator",role:"admin",approved:true};}
-  else{
-   const snap=await getDoc(doc(db,"users",user.uid));
-   if(!snap.exists()||snap.data().approved!==true||!["student","lecturer"].includes(snap.data().role)){
-    alert("Your account is not approved. Please contact the JSA administrator.");await signOut(auth);return;
-   }
-   currentProfile=snap.data();currentRole=currentProfile.role;
-  }
-  await openDashboard();
- }catch(err){console.error(err);alert("Could not verify your account. Please try again.");await signOut(auth)}
+
+currentUser=user;
+currentProfile=null;
+currentRole="";
+
+if(!user){
+
+$("dashboard").classList.add("hidden");
+$("mainTabs").classList.remove("hidden");
+return;
+
+}
+
+try{
+
+if(user.uid===ADMIN_UID){
+
+currentRole="admin";
+
+currentProfile={
+fullName:"Super Administrator",
+role:"admin",
+approved:true
+};
+
+}else{
+
+const snap=await getDoc(doc(db,"users",user.uid));
+
+if(
+!snap.exists()||
+snap.data().approved!==true||
+!["student","lecturer"].includes(snap.data().role)
+){
+
+alert("Your account is awaiting approval. Contact the administrator.");
+await signOut(auth);
+return;
+
+}
+
+currentProfile=snap.data();
+currentRole=currentProfile.role;
+
+}
+
+await openDashboard();
+
+}catch(e){
+
+console.error(e);
+alert("Could not verify your account.");
+await signOut(auth);
+
+}
+
 });
+
+// DASHBOARD
 
 async function openDashboard(){
- showDashboard();
- $("dashboardTitle").textContent=currentRole==="admin"?"Super Administrator":currentRole==="lecturer"?"Lecturer Dashboard":"Student Dashboard";
- $("welcome").textContent=`${currentProfile.fullName||currentUser.email} · ${currentUser.email}`;
- $("roleBadge").textContent=currentRole.toUpperCase();
- $("workspaceTitle").textContent=currentRole==="student"?"My attendance history":"Attendance management";
- $("adminPanel").classList.toggle("hidden",currentRole!=="admin");
- $("lecturerTools").classList.toggle("hidden",currentRole==="student");
- $("studentAttendanceTools").classList.toggle("hidden",currentRole!=="student");
- $("attendanceName").value=currentProfile.fullName||"";
- $("attendanceReg").value=currentProfile.registrationNumber||"";
- $("profileImage").src=currentProfile.photoURL||"";
- await Promise.all([loadAttendance(),loadDocuments()]);
- if(currentRole==="admin")await loadUsersAndStats();
+
+showDashboard();
+
+$("dashboardTitle").textContent=
+currentRole==="admin"?"Super Administrator":
+currentRole==="lecturer"?"Lecturer Dashboard":
+"Student Dashboard";
+
+$("welcome").textContent=
+`${currentProfile.fullName||currentUser.email} · ${currentProfile.registrationNumber||currentUser.email}`;
+
+$("roleBadge").textContent=currentRole.toUpperCase();
+
+$("workspaceTitle").textContent=
+currentRole==="student"?"Submit attendance / My attendance":"Student attendance";
+
+$("adminPanel").classList.toggle("hidden",currentRole!=="admin");
+
+$("lecturerTools").classList.toggle("hidden",currentRole==="student");
+
+$("studentAttendanceTools").classList.toggle("hidden",currentRole!=="student");
+
+$("attendanceReg").value=currentProfile.registrationNumber||"";
+
+$("profileImage").src=currentProfile.photoURL||"";
+
+await Promise.all([
+loadAttendance(),
+loadDocuments()
+]);
+
+if(currentRole==="admin")await loadUsersAndStats();
+
 }
+
+// PROFILE PHOTO
 
 $("saveProfilePhoto").onclick=async()=>{
- const file=$("profileFile").files[0];if(!validImage(file)){alert("Choose your own JPG, PNG or WEBP photo (maximum 5 MB).");return}
- try{
-  const path=`profilePhotos/${currentUser.uid}/profile`;
-  const storageRef=ref(storage,path);
-  await uploadBytes(storageRef,file,{contentType:file.type});
-  const url=await getDownloadURL(storageRef);
-  if(currentRole!=="admin")await updateDoc(doc(db,"users",currentUser.uid),{photoURL:url,photoPath:path});
-  currentProfile={...currentProfile,photoURL:url,photoPath:path};$("profileImage").src=url;
-  await audit("UPDATE_PROFILE_PHOTO",currentUser.uid,"User uploaded their own profile photograph");
-  alert("Your profile photograph has been saved.");
- }catch(e){console.error(e);alert("Could not save photo. Check Firebase Storage rules.");}
+
+const f=$("profileFile").files[0];
+
+if(!validImage(f)){
+alert("Choose JPG, PNG or WEBP up to 5 MB.");
+return;
+}
+
+try{
+
+const path=`profilePhotos/${currentUser.uid}/profile`;
+
+await uploadBytes(ref(storage,path),f,{contentType:f.type});
+
+const url=await getDownloadURL(ref(storage,path));
+
+if(currentRole!=="admin"){
+await updateDoc(doc(db,"users",currentUser.uid),{
+photoURL:url,photoPath:path
+});
+}
+
+currentProfile={...currentProfile,photoURL:url};
+
+$("profileImage").src=url;
+
+await audit("UPDATE_PROFILE_PHOTO",currentUser.uid);
+
+alert("Profile photograph saved.");
+
+}catch(e){
+
+console.error(e);
+alert("Photo upload failed. Check Storage rules.");
+
+}
+
 };
+
+// CREATE LECTURER
 
 $("createProfile").onclick=async()=>{
- if(currentRole!=="admin")return;
- const uid=$("newUid").value.trim(),email=$("newEmail").value.trim(),fullName=$("newName").value.trim(),number=$("newNumber").value.trim(),role="lecturer";
- if(!uid||!email||!fullName){alert("Enter UID, email and full name.");return}
- try{
-  await setDoc(doc(db,"users",uid),{email,fullName,role,registrationNumber:number,approved:false,photoURL:"",createdAt:serverTimestamp()});
-  await audit("CREATE_USER_PROFILE",uid,`Created pending ${role} profile`);
-  ["newUid","newEmail","newName","newNumber"].forEach(id=>$(id).value="");
-  alert("Profile created and awaiting approval.");await loadUsersAndStats();
- }catch(e){console.error(e);alert("Could not create profile. Check Firestore rules.");}
+
+if(currentRole!=="admin")return;
+
+const uid=$("newUid").value.trim();
+const email=$("newEmail").value.trim();
+const fullName=$("newName").value.trim();
+const number=$("newNumber").value.trim();
+
+if(!uid||!email||!fullName){
+alert("Enter UID, email and full name.");
+return;
+}
+
+try{
+
+await setDoc(doc(db,"users",uid),{
+
+email,
+fullName,
+role:"lecturer",
+staffNumber:number,
+approved:false,
+photoURL:"",
+createdAt:serverTimestamp()
+
+});
+
+await audit("CREATE_LECTURER_PROFILE",uid);
+
+["newUid","newEmail","newName","newNumber"].forEach(id=>$(id).value="");
+
+alert("Lecturer profile created. Approve it below.");
+
+await loadUsersAndStats();
+
+}catch(e){
+
+console.error(e);
+alert("Could not create lecturer profile.");
+
+}
+
 };
+
+// ADMIN ACCOUNTS
 
 async function loadUsersAndStats(){
- try{
-  const [users,attendance,documents]=await Promise.all([getDocs(collection(db,"users")),getDocs(collection(db,"attendance")),getDocs(collection(db,"documents"))]);
-  $("accountCount").textContent=users.size;$("attendanceCount").textContent=attendance.size;$("documentCount").textContent=documents.size;
-  const area=$("userList");area.replaceChildren();
-  users.forEach(s=>{
-   const u=s.data(),box=document.createElement("div");box.className="item";
-   const body=document.createElement("div");body.className="item-body";
-   const title=document.createElement("strong");title.textContent=`${u.fullName||"Unnamed"} — ${u.role||"No role"}`;
-   const detail=document.createElement("p");detail.className="small";detail.textContent=`${u.email||""} · ${u.approved?"Approved":"Pending"} · UID: ${s.id}`;
-   body.append(title,detail);box.append(body);
-   if(!u.approved){const approve=document.createElement("button");approve.textContent="Approve";approve.onclick=async()=>{try{await updateDoc(doc(db,"users",s.id),{approved:true});await audit("APPROVE_USER",s.id,"Administrator approved account");await loadUsersAndStats()}catch(e){alert("Approval failed.")}};box.append(approve)}
-   const edit=document.createElement("button");edit.className="light";edit.textContent="Edit";edit.onclick=async()=>{
-    const name=prompt("Full name",u.fullName||"");if(name===null)return;
-    const email=prompt("Email",u.email||"");if(email===null)return;
-    try{await updateDoc(doc(db,"users",s.id),{fullName:name.trim(),email:email.trim()});await audit("EDIT_USER",s.id,"Administrator edited user profile");await loadUsersAndStats()}catch(e){alert("Edit failed.")}
-   };box.append(edit);
-   const del=document.createElement("button");del.className="red";del.textContent="Delete profile";del.onclick=async()=>{
-    if(!confirm(`Delete profile for ${u.email||s.id}? This does not delete their Firebase Authentication login.`))return;
-    try{await deleteDoc(doc(db,"users",s.id));await audit("DELETE_USER_PROFILE",s.id,"Deleted Firestore user profile");await loadUsersAndStats()}catch(e){alert("Delete failed.")}
-   };box.append(del);area.append(box);
-  });
- }catch(e){console.error(e);$("userList").textContent="Could not load users and statistics."}
+
+try{
+
+const [us,ats,docs]=await Promise.all([
+
+getDocs(collection(db,"users")),
+getDocs(collection(db,"attendance")),
+getDocs(collection(db,"documents"))
+
+]);
+
+$("accountCount").textContent=us.size;
+$("attendanceCount").textContent=ats.size;
+$("documentCount").textContent=docs.size;
+
+const area=$("userList");
+area.replaceChildren();
+
+us.forEach(s=>{
+
+const u=s.data();
+
+const box=document.createElement("div");
+box.className="item";
+
+const body=document.createElement("div");
+body.className="item-body";
+
+const t=document.createElement("strong");
+
+t.textContent=`${u.fullName||"Unnamed"} — ${u.role||"No role"}`;
+
+const p=document.createElement("p");
+p.className="small";
+
+p.textContent=
+`${u.registrationNumber||u.email||""} · ${u.email||""} · ${u.approved?"Approved":"Pending"}`;
+
+body.append(t,p);
+box.append(body);
+
+if(!u.approved){
+
+const b=document.createElement("button");
+b.textContent="Approve";
+
+b.onclick=async()=>{
+
+try{
+
+await updateDoc(doc(db,"users",s.id),{
+approved:true
+});
+
+await audit("APPROVE_USER",s.id);
+
+await loadUsersAndStats();
+
+}catch(e){
+
+alert("Approval failed.");
+
 }
+
+};
+
+box.append(b);
+
+}
+
+const edit=document.createElement("button");
+edit.className="light";
+edit.textContent="Edit";
+
+edit.onclick=async()=>{
+
+const name=prompt("Full name",u.fullName||"");
+
+if(name===null)return;
+
+try{
+
+await updateDoc(doc(db,"users",s.id),{
+fullName:name.trim()
+});
+
+await loadUsersAndStats();
+
+}catch(e){
+
+alert("Edit failed.");
+
+}
+
+};
+
+box.append(edit);
+
+const del=document.createElement("button");
+del.className="red";
+del.textContent="Delete profile";
+
+del.onclick=async()=>{
+
+if(!confirm("Delete this profile? The Firebase login is not deleted."))return;
+
+try{
+
+await deleteDoc(doc(db,"users",s.id));
+
+await loadUsersAndStats();
+
+}catch(e){
+
+alert("Delete failed.");
+
+}
+
+};
+
+box.append(del);
+
+area.append(box);
+
+});
+
+}catch(e){
+
+console.error(e);
+$("userList").textContent="Could not load accounts.";
+
+}
+
+}
+
+// ATTENDANCE
 
 async function loadAttendance(){
- const area=$("attendanceRecords");area.textContent="Loading attendance…";
- try{
-  let snaps;
-  if(currentRole==="student")snaps=await getDocs(query(collection(db,"attendance"),where("studentUid","==",currentUser.uid)));
-  else snaps=await getDocs(collection(db,"attendance"));
-  attendanceRows=[];const selected=$("attendanceDate").value||today();
-  snaps.forEach(s=>{const r={id:s.id,...s.data()};if(currentRole==="student"||r.date===selected)attendanceRows.push(r)});
-  renderAttendance();
- }catch(e){console.error(e);area.textContent="Could not load attendance records. Check database rules."}
+
+const area=$("attendanceRecords");
+
+area.textContent="Loading attendance...";
+
+try{
+
+let snaps;
+
+if(currentRole==="student"){
+
+snaps=await getDocs(query(
+collection(db,"attendance"),
+where("studentUid","==",currentUser.uid)
+));
+
+}else{
+
+snaps=await getDocs(collection(db,"attendance"));
+
 }
+
+attendanceRows=[];
+
+const date=$("attendanceDate").value||today();
+
+snaps.forEach(s=>{
+
+const r={id:s.id,...s.data()};
+
+if(currentRole==="student"||r.date===date){
+attendanceRows.push(r);
+}
+
+});
+
+attendanceRows.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+renderAttendance();
+
+}catch(e){
+
+console.error(e);
+area.textContent="Could not load attendance. Check Firestore rules.";
+
+}
+
+}
+
 function renderAttendance(){
- const area=$("attendanceRecords");area.replaceChildren();
- const h=document.createElement("h3");h.textContent=`Attendance records: ${attendanceRows.length}`;area.append(h);
- if(!attendanceRows.length){area.append(document.createTextNode("No attendance records found."));return}
- attendanceRows.forEach(r=>{
-  const box=document.createElement("div");box.className="item";
-  if(r.photoURL){const img=document.createElement("img");img.src=r.photoURL;img.alt="Attendance selfie submitted by this student";box.append(img)}
-  const body=document.createElement("div");body.className="item-body";
-  const p=document.createElement("p");p.textContent=`${r.name||""} · ${r.reg||""}`;
-  const d=document.createElement("p");d.className="small";d.textContent=`${r.date||""} · ${r.submitted||""} · Status: ${r.status||"Pending"} · ${r.lecturer||"Not marked"}`;
-  body.append(p,d);box.append(body);
-  if(currentRole==="admin"||currentRole==="lecturer"){
-   for(const status of ["Present","Absent"]){const b=document.createElement("button");b.textContent=status;b.className=status==="Absent"?"gray":"";b.onclick=()=>markAttendance(r.id,status);box.append(b)}
-  }
-  if(currentRole==="admin"){
-   const edit=document.createElement("button");edit.className="light";edit.textContent="Edit details";edit.onclick=()=>editAttendance(r);box.append(edit);
-   const del=document.createElement("button");del.className="red";del.textContent="Delete";del.onclick=()=>deleteAttendance(r);box.append(del);
-  }
-  area.append(box);
- });
+
+const area=$("attendanceRecords");
+
+area.replaceChildren();
+
+const h=document.createElement("h3");
+
+h.textContent=`Attendance records: ${attendanceRows.length}`;
+
+area.append(h);
+
+if(!attendanceRows.length){
+
+area.append(document.createTextNode("No attendance records found."));
+
+return;
+
 }
+
+attendanceRows.forEach(r=>{
+
+const box=document.createElement("div");
+box.className="item";
+
+if(r.photoURL){
+
+const img=document.createElement("img");
+
+img.src=r.photoURL;
+img.alt="Student attendance selfie";
+
+box.append(img);
+
+}
+
+const body=document.createElement("div");
+body.className="item-body";
+
+const p=document.createElement("strong");
+
+p.textContent=`${r.registrationNumber||""} — ${r.name||""}`;
+
+const d=document.createElement("p");
+
+d.className="small";
+
+d.textContent=
+`${r.date||""} · ${r.submitted||""} · ${r.status||"Pending"} · ${r.markedByEmail||"Not marked"}`;
+
+body.append(p,d);
+box.append(body);
+
+if(currentRole==="admin"||currentRole==="lecturer"){
+
+for(const status of ["Present","Absent"]){
+
+const b=document.createElement("button");
+
+b.textContent=status;
+b.className=status==="Absent"?"gray":"";
+
+b.onclick=()=>markAttendance(r.id,status);
+
+box.append(b);
+
+}
+
+}
+
+if(currentRole==="admin"){
+
+const del=document.createElement("button");
+
+del.className="red";
+del.textContent="Delete";
+
+del.onclick=()=>deleteAttendance(r);
+
+box.append(del);
+
+}
+
+area.append(box);
+
+});
+
+}
+
 async function markAttendance(id,status){
- try{await updateDoc(doc(db,"attendance",id),{status,lecturer:currentUser.email,markedBy:currentUser.uid,updatedAt:serverTimestamp()});await audit("MARK_ATTENDANCE",id,status);await loadAttendance()}
- catch(e){console.error(e);alert("Could not update attendance.")}
+
+try{
+
+await updateDoc(doc(db,"attendance",id),{
+
+status,
+markedByUid:currentUser.uid,
+markedByEmail:currentUser.email,
+updatedAt:serverTimestamp()
+
+});
+
+await audit("MARK_ATTENDANCE",id,status);
+
+await loadAttendance();
+
+}catch(e){
+
+console.error(e);
+alert("Could not update attendance.");
+
 }
-async function editAttendance(r){
- const name=prompt("Student full name",r.name||"");if(name===null)return;
- const reg=prompt("Registration number",r.reg||"");if(reg===null)return;
- try{await updateDoc(doc(db,"attendance",r.id),{name:name.trim(),reg:reg.trim(),updatedAt:serverTimestamp()});await audit("EDIT_ATTENDANCE",r.id,"Edited name or registration number");await loadAttendance()}
- catch(e){alert("Could not edit record.")}
+
 }
+
 async function deleteAttendance(r){
- if(!confirm(`Permanently delete attendance record for ${r.name||r.reg}?`))return;
- try{
-  await deleteDoc(doc(db,"attendance",r.id));
-  if(r.photoPath)try{await deleteObject(ref(storage,r.photoPath))}catch(e){console.warn("Photo cleanup failed",e)}
-  await audit("DELETE_ATTENDANCE",r.id,"Administrator deleted attendance record");await loadAttendance();
- }catch(e){console.error(e);alert("Could not delete attendance record.")}
+
+if(!confirm("Permanently delete this attendance record?"))return;
+
+try{
+
+await deleteDoc(doc(db,"attendance",r.id));
+
+if(r.photoPath){
+
+try{
+await deleteObject(ref(storage,r.photoPath));
+}catch(e){}
+
 }
+
+await loadAttendance();
+
+}catch(e){
+
+alert("Could not delete attendance.");
+
+}
+
+}
+
 $("attendanceDate").addEventListener("change",loadAttendance);
 
+// STUDENT ATTENDANCE SUBMISSION
+
 $("attendanceForm").addEventListener("submit",async e=>{
- e.preventDefault();if(currentRole!=="student")return;
- const file=$("attendancePhoto").files[0];if(!validImage(file)){alert("Choose your own JPG, PNG or WEBP selfie (maximum 5 MB).");return}
- const name=$("attendanceName").value.trim(),reg=$("attendanceReg").value.trim(),date=today();
- const id=`${currentUser.uid}_${date}`;
- try{
-  const path=`attendanceProofs/${currentUser.uid}/${date}`;
-  await uploadBytes(ref(storage,path),file,{contentType:file.type});
-  const photoURL=await getDownloadURL(ref(storage,path));
-  await setDoc(doc(db,"attendance",id),{studentUid:currentUser.uid,name,reg,date,photoURL,photoPath:path,submitted:new Date().toLocaleTimeString(),status:"Pending",lecturer:"",createdAt:serverTimestamp()});
-  await audit("SUBMIT_ATTENDANCE",id,"Student submitted attendance and own selfie");
-  alert("Attendance submitted successfully.");$("attendanceForm").reset();$("attendanceName").value=name;$("attendanceReg").value=reg;await loadAttendance();
- }catch(err){console.error(err);alert("Attendance submission failed. Check your internet connection and Firebase rules.")}
+
+e.preventDefault();
+
+if(currentRole!=="student")return;
+
+const registrationNumber=cleanReg($("attendanceReg").value);
+
+const f=$("attendancePhoto").files[0];
+
+if(registrationNumber!==cleanReg(currentProfile.registrationNumber||"")){
+
+alert("Enter the registration number linked to your account.");
+
+return;
+
+}
+
+if(!validImage(f)){
+
+alert("Take a JPG, PNG or WEBP selfie up to 5 MB.");
+
+return;
+
+}
+
+const date=today();
+
+const id=`${currentUser.uid}_${date}`;
+
+const path=`attendanceProofs/${currentUser.uid}/${date}`;
+
+try{
+
+const existing=await getDoc(doc(db,"attendance",id));
+
+if(existing.exists()){
+
+alert("You have already submitted attendance today.");
+
+return;
+
+}
+
+await uploadBytes(ref(storage,path),f,{
+contentType:f.type
 });
 
-$("documentForm").addEventListener("submit",async e=>{
- e.preventDefault();const file=$("documentFile").files[0],title=$("documentTitle").value.trim();
- if(!file||!title)return;
- const ext=fileExt(file);if(!["pdf","doc","docx"].includes(ext)||file.size>10*1024*1024){alert("Upload a PDF or Word document up to 10 MB.");return}
- try{
-  const id=crypto.randomUUID(),path=`documents/${currentUser.uid}/${id}_${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
-  await uploadBytes(ref(storage,path),file,{contentType:file.type||"application/octet-stream"});
-  const url=await getDownloadURL(ref(storage,path));
-  await setDoc(doc(db,"documents",id),{ownerUid:currentUser.uid,ownerEmail:currentUser.email,title,fileName:file.name,fileURL:url,filePath:path,uploadedAt:serverTimestamp()});
-  await audit("UPLOAD_DOCUMENT",id,title);$("documentForm").reset();await loadDocuments();if(currentRole==="admin")await loadUsersAndStats();alert("Document uploaded.");
- }catch(err){console.error(err);alert("Document upload failed. Check Storage and Firestore rules.")}
+const photoURL=await getDownloadURL(ref(storage,path));
+
+await setDoc(doc(db,"attendance",id),{
+
+studentUid:currentUser.uid,
+name:currentProfile.fullName,
+registrationNumber,
+date,
+photoURL,
+photoPath:path,
+submitted:new Date().toLocaleTimeString(),
+status:"Pending",
+createdAt:serverTimestamp()
+
 });
-async function loadDocuments(){
- const area=$("documentList");area.textContent="Loading documents…";
- try{
-  const snaps=currentRole==="admin"?await getDocs(collection(db,"documents")):await getDocs(query(collection(db,"documents"),where("ownerUid","==",currentUser.uid)));
-  area.replaceChildren();
-  if(snaps.empty){area.textContent="No documents uploaded.";return}
-  snaps.forEach(s=>{
-   const d=s.data(),box=document.createElement("div");box.className="item";
-   const body=document.createElement("div");body.className="item-body";
-   const title=document.createElement("strong");title.textContent=d.title||d.fileName||"Document";
-   const meta=document.createElement("p");meta.className="small";meta.textContent=`Uploaded by ${d.ownerEmail||"user"} · ${d.fileName||""}`;
-   const link=document.createElement("a");link.href=d.fileURL;link.target="_blank";link.rel="noopener";link.textContent="Open document";
-   body.append(title,meta,link);box.append(body);
-   if(currentRole==="admin"){
-    const edit=document.createElement("button");edit.className="light";edit.textContent="Edit title";edit.onclick=async()=>{
-     const nextTitle=prompt("Document title",d.title||"");if(nextTitle===null||!nextTitle.trim())return;
-     try{await updateDoc(doc(db,"documents",s.id),{title:nextTitle.trim()});await audit("EDIT_DOCUMENT",s.id,"Administrator changed document title");await loadDocuments()}
-     catch(e){alert("Could not edit document title.")}
-    };box.append(edit);
-   }
-   if(currentRole==="admin"||d.ownerUid===currentUser.uid){
-    const del=document.createElement("button");del.className="red";del.textContent="Delete document";del.onclick=async()=>{
-     if(!confirm(`Delete "${d.title||d.fileName}" permanently?`))return;
-     try{await deleteDoc(doc(db,"documents",s.id));if(d.filePath)try{await deleteObject(ref(storage,d.filePath))}catch(e){console.warn(e)}await audit("DELETE_DOCUMENT",s.id,"Document deleted");await loadDocuments();if(currentRole==="admin")await loadUsersAndStats()}
-     catch(e){alert("Could not delete document.")}
-    };box.append(del);
-   }
-   area.append(box);
-  });
- }catch(e){console.error(e);area.textContent="Could not load documents."}
+
+await audit("SUBMIT_ATTENDANCE",id);
+
+$("attendanceForm").reset();
+
+$("attendanceReg").value=currentProfile.registrationNumber;
+
+alert("Attendance submitted.");
+
+await loadAttendance();
+
+}catch(err){
+
+console.error(err);
+
+alert("Attendance submission failed. Check Firebase rules and internet connection.");
+
 }
-$("exportCsv").onclick=()=>{
- const rows=[["Name","Registration number","Date","Time","Status","Lecturer"],...attendanceRows.map(r=>[r.name,r.reg,r.date,r.submitted,r.status,r.lecturer])];
- const csv=rows.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
- const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");
- a.href=url;a.download=`JSA-attendance-${today()}.csv`;a.click();URL.revokeObjectURL(url);
+
+});
+
+// DOCUMENTS
+
+$("documentForm").addEventListener("submit",async e=>{
+
+e.preventDefault();
+
+const f=$("documentFile").files[0];
+const title=$("documentTitle").value.trim();
+
+if(!f||!title)return;
+
+if(!["pdf","doc","docx"].includes(fileExt(f))||f.size>10*1024*1024){
+
+alert("Choose PDF or Word document up to 10 MB.");
+
+return;
+
+}
+
+try{
+
+const id=crypto.randomUUID();
+
+const path=`documents/${currentUser.uid}/${id}_${f.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
+
+await uploadBytes(ref(storage,path),f,{
+contentType:f.type||"application/octet-stream"
+});
+
+const url=await getDownloadURL(ref(storage,path));
+
+await setDoc(doc(db,"documents",id),{
+
+ownerUid:currentUser.uid,
+ownerEmail:currentUser.email,
+title,
+fileName:f.name,
+fileURL:url,
+filePath:path,
+uploadedAt:serverTimestamp()
+
+});
+
+$("documentForm").reset();
+
+await loadDocuments();
+
+alert("Document uploaded.");
+
+}catch(e){
+
+console.error(e);
+alert("Document upload failed.");
+
+}
+
+});
+
+async function loadDocuments(){
+
+const area=$("documentList");
+
+area.textContent="Loading documents...";
+
+try{
+
+const snaps=currentRole==="admin"
+?await getDocs(collection(db,"documents"))
+:await getDocs(query(collection(db,"documents"),where("ownerUid","==",currentUser.uid)));
+
+area.replaceChildren();
+
+if(snaps.empty){
+
+area.textContent="No documents uploaded.";
+
+return;
+
+}
+
+snaps.forEach(s=>{
+
+const d=s.data();
+
+const box=document.createElement("div");
+box.className="item";
+
+const body=document.createElement("div");
+body.className="item-body";
+
+const t=document.createElement("strong");
+t.textContent=d.title||d.fileName;
+
+const a=document.createElement("a");
+a.href=d.fileURL;
+a.target="_blank";
+a.rel="noopener";
+a.textContent="Open document";
+
+body.append(t,document.createElement("br"),a);
+
+box.append(body);
+
+if(currentRole==="admin"||d.ownerUid===currentUser.uid){
+
+const del=document.createElement("button");
+
+del.className="red";
+del.textContent="Delete";
+
+del.onclick=async()=>{
+
+if(!confirm("Delete this document?"))return;
+
+try{
+
+await deleteDoc(doc(db,"documents",s.id));
+
+if(d.filePath){
+
+try{
+await deleteObject(ref(storage,d.filePath));
+}catch(e){}
+
+}
+
+await loadDocuments();
+
+}catch(e){
+
+alert("Delete failed.");
+
+}
+
 };
+
+box.append(del);
+
+}
+
+area.append(box);
+
+});
+
+}catch(e){
+
+console.error(e);
+area.textContent="Could not load documents.";
+
+}
+
+}
+
+// EXPORT CSV
+
+$("exportCsv").onclick=()=>{
+
+const rows=[
+
+["Registration number","Name","Date","Time","Status"],
+
+...attendanceRows.map(r=>[
+r.registrationNumber,
+r.name,
+r.date,
+r.submitted,
+r.status
+])
+
+];
+
+const csv=rows.map(row=>
+row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")
+).join("\n");
+
+const url=URL.createObjectURL(
+new Blob([csv],{type:"text/csv;charset=utf-8"})
+);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download=`JSA-attendance-${today()}.csv`;
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+};
+
 $("logoutButton").onclick=()=>signOut(auth);
+
 </script>
 </body>
 </html>
