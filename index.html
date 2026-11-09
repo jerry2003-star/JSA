@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSA - Jerry Smart Attendance</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f6fa;color:#18334d}
+header{background:linear-gradient(120deg,#087b55,#1266a5);color:white;padding:28px 18px;text-align:center}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0}
+main{max-width:650px;margin:25px auto;padding:15px}
+.card{background:white;padding:22px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 14px #00000012}
+h2{margin-top:0;color:#087b55}
+button{border:0;border-radius:8px;padding:13px 17px;background:#087b55;color:white;font-weight:bold;cursor:pointer}
+button.blue{background:#1266a5}
+button.gray{background:#667788}
+input{width:100%;padding:13px;margin:8px 0 16px;border:1px solid #ccd7df;border-radius:8px;font-size:16px}
+label{font-weight:bold}
+.tabs{display:flex;gap:10px;margin-bottom:18px}
+.tabs button{flex:1}
+.hidden{display:none}
+.student{border:1px solid #dce5eb;border-radius:10px;padding:13px;margin:12px 0}
+.student img{width:75px;height:75px;object-fit:cover;border-radius:50%}
+.status{font-weight:bold;color:#087b55}
+.small{font-size:13px;color:#667788}
+</style>
+</head>
+<body>
+<header>
+<h1>JSA</h1>
+<p>Jerry Smart Attendance Management System</p>
+</header>
+
+<main>
+<div class="tabs">
+<button onclick="show('student')">Student</button>
+<button class="blue" onclick="show('lecturer')">Lecturer</button>
+</div>
+
+<section id="student" class="card">
+<h2>Student Attendance</h2>
+<form id="studentForm">
+<label>Full name</label>
+<input id="fullname" required placeholder="Enter your full name">
+
+<label>Registration number</label>
+<input id="regno" required placeholder="Enter registration number">
+
+<label>Take or upload your selfie</label>
+<input id="selfie" type="file" accept="image/*" capture="user" required>
+
+<button type="submit">Submit Attendance</button>
+</form>
+<p class="small">Please provide correct information and your own photograph.</p>
+</section>
+
+<section id="lecturer" class="card hidden">
+<h2>Lecturer Access</h2>
+<label>Lecturer's full name</label>
+<input id="lecturerName" placeholder="Enter lecturer name">
+<button onclick="enterLecturer()">Open Dashboard</button>
+</section>
+
+<section id="dashboard" class="card hidden">
+<h2>Lecturer Dashboard</h2>
+<p id="welcome"></p>
+<label>Select attendance date</label>
+<input type="date" id="attendanceDate">
+<div id="records"></div>
+<button class="blue" onclick="exportCSV()">Download Attendance CSV</button>
+<button class="gray" onclick="show('lecturer')">Back</button>
+</section>
+</main>
+
+<script>
+const KEY="JSA_ATTENDANCE_V1";
+let currentLecturer="";
+
+function getRecords(){
+ return JSON.parse(localStorage.getItem(KEY)||"[]");
+}
+function saveRecords(data){
+ localStorage.setItem(KEY,JSON.stringify(data));
+}
+function show(id){
+ ["student","lecturer","dashboard"].forEach(x=>
+ document.getElementById(x).classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+}
+document.getElementById("attendanceDate").value=
+ new Date().toISOString().slice(0,10);
+
+async function resizePhoto(file){
+ return new Promise((resolve,reject)=>{
+ const reader=new FileReader();
+ reader.onload=()=>{
+ const img=new Image();
+ img.onload=()=>{
+ const canvas=document.createElement("canvas");
+ const scale=Math.min(480/img.width,480/img.height,1);
+ canvas.width=img.width*scale;
+ canvas.height=img.height*scale;
+ canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+ resolve(canvas.toDataURL("image/jpeg",0.65));
+ };
+ img.onerror=reject;
+ img.src=reader.result;
+ };
+ reader.onerror=reject;
+ reader.readAsDataURL(file);
+ });
+}
+
+document.getElementById("studentForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const name=document.getElementById("fullname").value.trim();
+ const reg=document.getElementById("regno").value.trim();
+ const file=document.getElementById("selfie").files[0];
+ if(!file){alert("Please take your selfie.");return;}
+ try{
+ const photo=await resizePhoto(file);
+ const records=getRecords();
+ const date=new Date().toLocaleDateString("en-CA");
+ if(records.some(r=>r.reg.toLowerCase()===reg.toLowerCase()&&r.date===date)){
+ alert("This registration number has already submitted attendance today.");
+ return;
+ }
+ records.push({
+ id:Date.now(),name,reg,photo,date,
+ lecturer:"",status:"Pending",
+ submitted:new Date().toLocaleTimeString()
+ });
+ saveRecords(records);
+ alert("Attendance submitted successfully!");
+ e.target.reset();
+ }catch(err){alert("Could not process the selfie. Please try again.");}
+});
+
+function enterLecturer(){
+ currentLecturer=document.getElementById("lecturerName").value.trim();
+ if(!currentLecturer){alert("Enter lecturer name.");return;}
+ document.getElementById("welcome").textContent="Lecturer: "+currentLecturer;
+ show("dashboard");
+ renderRecords();
+}
+
+document.getElementById("attendanceDate").addEventListener("change",renderRecords);
+
+function renderRecords(){
+ const date=document.getElementById("attendanceDate").value;
+ const records=getRecords().filter(r=>r.date===date);
+ const area=document.getElementById("records");
+ area.innerHTML="<h3>Student submissions: "+records.length+"</h3>";
+ if(!records.length){
+ area.innerHTML+="<p>No student submissions for this date.</p>";
+ return;
+ }
+ records.forEach(r=>{
+ const div=document.createElement("div");
+ div.className="student";
+ const img=document.createElement("img");
+ img.src=r.photo;
+ img.alt="Student selfie";
+ const details=document.createElement("div");
+ details.innerHTML="<strong>"+escapeHTML(r.name)+"</strong><br>"+
+ escapeHTML(r.reg)+"<br><span class='small'>Submitted: "+
+ escapeHTML(r.submitted)+"</span><br><span class='status'>"+
+ escapeHTML(r.status)+"</span>";
+ const present=document.createElement("button");
+ present.textContent="Present";
+ present.onclick=()=>mark(r.id,"Present");
+ const absent=document.createElement("button");
+ absent.textContent="Absent";
+ absent.className="gray";
+ absent.onclick=()=>mark(r.id,"Absent");
+ div.append(img,details,present,absent);
+ area.append(div);
+ });
+}
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",
+ '"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function mark(id,status){
+ const records=getRecords();
+ const record=records.find(r=>r.id===id);
+ if(!record)return;
+ record.status=status;
+ record.lecturer=currentLecturer;
+ saveRecords(records);
+ renderRecords();
+}
+
+function exportCSV(){
+ const date=document.getElementById("attendanceDate").value;
+ const rows=[["Full name","Registration number","Date","Time","Status","Lecturer"]];
+ getRecords().filter(r=>r.date===date).forEach(r=>{
+ rows.push([r.name,r.reg,r.date,r.submitted,r.status,r.lecturer]);
+ });
+ const csv=rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\n");
+ const blob=new Blob([csv],{type:"text/csv"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="JSA-attendance-"+date+".csv";
+ a.click();
+ URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
