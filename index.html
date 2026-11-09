@@ -1,1291 +1,799 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#123b63">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JSA | Jerry Smart Attendance</title>
-
 <style>
 :root {
- --navy:#123b63;
- --green:#087f70;
- --gold:#e8b44c;
- --bg:#f3f6fa;
- --ink:#19324a;
- --muted:#687b8d;
- --line:#e1e8ef;
- --red:#b83232;
+  --primary:#173b67;
+  --secondary:#245a91;
+  --accent:#e5a323;
+  --bg:#f3f6fb;
+  --white:#fff;
+  --text:#19283b;
+  --muted:#718096;
+  --danger:#c0392b;
+  --success:#188653;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px Arial,sans-serif}
-header{background:linear-gradient(120deg,var(--navy),var(--green));color:white;padding:22px 16px}
-.top,main{max-width:1100px;margin:auto}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.brand h1{margin:0;font-size:30px;letter-spacing:2px}
-.brand p{margin:5px 0 0;color:#e5f3f1}
-#connection{font-size:12px}
-main{padding:22px 15px 40px}
-.card{background:white;border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:17px;box-shadow:0 8px 28px #123b6310}
-h2,h3{color:var(--navy);margin-top:0}
-h2{font-size:22px}
-h3{font-size:17px}
-button{border:0;border-radius:9px;padding:12px 15px;background:var(--green);color:white;font-weight:bold;cursor:pointer;margin:4px}
-button:disabled{opacity:.5}
-.blue{background:var(--navy)}
-.gray{background:#687b8d}
-.red{background:var(--red)}
-.light{background:#eaf2f7;color:var(--navy)}
-input,select{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #cbd7e1;border-radius:9px;font-size:15px;background:white;color:var(--ink)}
-label{font-weight:bold;font-size:13px;color:var(--navy)}
-.small{font-size:12px;color:var(--muted);line-height:1.5}
+body{
+  margin:0;font-family:Arial,sans-serif;
+  background:var(--bg);color:var(--text)
+}
+header{
+  background:var(--primary);color:white;padding:17px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap
+}
+header h2{margin:0;font-size:20px}
+main{max-width:1100px;margin:25px auto;padding:15px}
+.card{
+  background:white;padding:22px;border-radius:14px;
+  box-shadow:0 3px 15px #102b4812;margin-bottom:18px
+}
+h2,h3{color:var(--primary)}
+input,select,button{
+  width:100%;padding:13px;margin:7px 0;
+  border-radius:8px;border:1px solid #ccd5e0;
+  font-size:15px
+}
+button{
+  background:var(--primary);color:white;
+  border:0;font-weight:bold;cursor:pointer
+}
+button:hover{background:var(--secondary)}
+button.secondary{background:#65758b}
+button.danger{background:var(--danger)}
+button.success{background:var(--success)}
+button.gold{background:var(--accent);color:#17283c}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1;min-width:0}
 .hidden{display:none!important}
-.tabs,.actions{display:flex;gap:8px;flex-wrap:wrap}
-.tabs button{flex:1;min-width:130px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-.stat{padding:15px;border-radius:12px;background:#edf5f7;border:1px solid #dce9ed}
-.stat strong{display:block;font-size:24px;color:var(--green);margin-top:6px}
-.profile{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
-.avatar{width:105px;height:105px;border-radius:50%;object-fit:cover;border:4px solid #e6f0ef;background:#edf2f5}
-.item{border:1px solid var(--line);border-radius:12px;padding:13px;margin:11px 0;display:flex;gap:13px;align-items:flex-start;flex-wrap:wrap}
-.item img{width:88px;height:88px;object-fit:cover;border-radius:9px}
-.item-body{flex:1;min-width:180px}
-.pill{display:inline-block;padding:5px 9px;border-radius:30px;background:#e8f4ef;color:#08745f;font-size:12px;font-weight:bold}
-hr{border:0;border-top:1px solid var(--line);margin:19px 0}
+.muted{color:var(--muted);font-size:13px}
+.center{text-align:center}
+.profile{
+  width:105px;height:105px;border-radius:50%;
+  object-fit:cover;border:4px solid var(--accent);
+  background:#e8edf4;cursor:pointer
+}
+.profile-wrap{text-align:center;margin:10px auto}
+.profile-wrap p{font-size:12px;color:var(--muted)}
+video,canvas{
+  width:100%;max-width:430px;border-radius:12px;
+  background:#111;display:block;margin:10px auto
+}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:11px;border-bottom:1px solid #e2e8f0;text-align:left}
+th{background:#edf2f8;color:var(--primary)}
+.table-wrap{overflow-x:auto}
+.badge{
+  display:inline-block;padding:5px 9px;border-radius:20px;
+  background:#edf2f8;font-size:12px
+}
+.notice{
+  padding:12px;border-radius:8px;background:#fff7e5;
+  border-left:4px solid var(--accent);margin:10px 0
+}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:65px}
+.password-wrap button{
+  position:absolute;right:4px;top:10px;width:auto;
+  padding:9px;background:#65758b;margin:0;font-size:12px
+}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+nav button{width:auto;padding:10px 13px}
+.small{font-size:12px}
 @media(max-width:600px){
-.top{align-items:flex-start;flex-direction:column}
-.card{padding:16px}
-.brand h1{font-size:26px}
+  main{padding:10px;margin:10px auto}
+  .card{padding:16px}
+  .row{flex-direction:column;align-items:stretch;gap:0}
+  table{font-size:12px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-<div class="top">
-<div class="brand">
-<h1>JSA</h1>
-<p>Jerry Smart Attendance Management System</p>
-</div>
-<div id="connection">Connecting to Firebase...</div>
-</div>
+  <h2>JSA — Jerry Smart Attendance</h2>
+  <span id="headerUser">Attendance Management System</span>
 </header>
 
 <main>
 
-<div class="tabs" id="mainTabs">
-<button onclick="showPanel('studentPanel')">Student</button>
-<button class="blue" onclick="showPanel('staffPanel')">Lecturer / Admin</button>
-</div>
-
-<!-- STUDENT PORTAL -->
-
-<section id="studentPanel" class="card">
-
-<h2>Student login</h2>
-
-<form id="studentLoginForm">
-
-<label>Registration number</label>
-<input id="studentLoginReg" required placeholder="Enter your registration number">
-
-<label>Password</label>
-<input id="studentLoginPassword" type="password" required placeholder="Enter your password">
-
-<button type="submit">Login</button>
-
-</form>
-
-<hr>
-
-<h3>New student? Register here</h3>
-
-<form id="studentRegisterForm">
-
-<label>Full name</label>
-<input id="regName" required placeholder="Enter your full name">
-
-<label>Registration number</label>
-<input id="regNumber" required placeholder="Enter your registration number">
-
-<label>Create password</label>
-<input id="regPassword" type="password" required minlength="6" placeholder="At least 6 characters">
-
-<button class="blue" type="submit">Register as a student</button>
-
-</form>
+<!-- HOME -->
+<section id="home">
+  <div class="card center">
+    <h2>Welcome to JSA</h2>
+    <p>Smart, simple and secure class attendance.</p>
+    <button onclick="showPage('studentPage')">Student Attendance</button>
+    <button class="secondary" onclick="showPage('staffLogin')">Admin / Lecturer Login</button>
+  </div>
 </section>
 
-<!-- STAFF PORTAL -->
+<!-- STUDENT ATTENDANCE -->
+<section id="studentPage" class="hidden">
+  <div class="card">
+    <h2>Student Attendance</h2>
+    <p>Enter your registration number and the course code provided by your lecturer.</p>
 
-<section id="staffPanel" class="card hidden">
+    <label>Student Registration Number</label>
+    <input id="studentReg" placeholder="Example: UOI-LLB-2023-0141">
 
-<h2>Lecturer / Administrator login</h2>
+    <label>Course Code</label>
+    <input id="studentCourseCode" placeholder="Enter your course code">
 
-<form id="staffLoginForm">
+    <button onclick="verifyStudentCourse()">Continue</button>
+    <button class="secondary" onclick="showPage('home')">Back</button>
+    <p id="studentMessage" class="muted"></p>
+  </div>
 
-<label>Email address</label>
-<input id="staffEmail" type="email" required placeholder="Enter staff email">
-
-<label>Password</label>
-<input id="staffPassword" type="password" required placeholder="Enter password">
-
-<button class="blue" type="submit">Login</button>
-
-</form>
+  <div class="card hidden" id="studentCameraSection">
+    <h3>Take Your Attendance Selfie</h3>
+    <p id="verifiedCourseInfo" class="muted"></p>
+    <video id="studentVideo" autoplay playsinline></video>
+    <canvas id="studentCanvas" class="hidden"></canvas>
+    <button onclick="takeStudentSelfie()">Take Selfie</button>
+    <img id="studentPreview" class="hidden"
+      style="width:180px;border-radius:12px;display:block;margin:10px auto">
+    <button id="submitAttendanceBtn" class="success hidden"
+      onclick="submitStudentAttendance()">Submit Attendance</button>
+    <button class="secondary" onclick="stopCamera('studentVideo')">Close Camera</button>
+    <p id="attendanceMessage" class="muted"></p>
+  </div>
 </section>
 
-<!-- DASHBOARD -->
+<!-- STAFF LOGIN -->
+<section id="staffLogin" class="hidden">
+  <div class="card">
+    <h2>Admin / Lecturer Login</h2>
+    <label>Email Address</label>
+    <input type="email" id="staffEmail" placeholder="Enter your email">
 
-<section id="dashboard" class="hidden">
+    <label>Password</label>
+    <div class="password-wrap">
+      <input type="password" id="staffPassword" placeholder="Enter your password">
+      <button type="button" onclick="togglePassword('staffPassword',this)">Show</button>
+    </div>
 
-<div class="card">
-
-<div class="profile">
-
-<img id="profileImage" class="avatar" alt="Profile photograph">
-
-<div>
-<h2 id="dashboardTitle">Dashboard</h2>
-<div id="welcome"></div>
-<span id="roleBadge" class="pill"></span>
-</div>
-
-</div>
-
-<hr>
-
-<h3>Profile photograph</h3>
-
-<label>Upload your photograph</label>
-<input id="profileFile" type="file" accept="image/jpeg,image/png,image/webp">
-
-<button id="saveProfilePhoto">Save profile photograph</button>
-
-</div>
-
-<!-- ADMIN PANEL -->
-
-<div id="adminPanel" class="card hidden">
-
-<h2>Administrator controls</h2>
-
-<div class="grid">
-
-<div class="stat">
-Registered accounts
-<strong id="accountCount">—</strong>
-</div>
-
-<div class="stat">
-Attendance submissions
-<strong id="attendanceCount">—</strong>
-</div>
-
-<div class="stat">
-Documents
-<strong id="documentCount">—</strong>
-</div>
-
-</div>
-
-<hr>
-
-<h3>Create lecturer profile</h3>
-
-<label>Lecturer Authentication UID</label>
-<input id="newUid" placeholder="Lecturer UID">
-
-<label>Lecturer email</label>
-<input id="newEmail" type="email" placeholder="Lecturer email">
-
-<label>Lecturer full name</label>
-<input id="newName" placeholder="Lecturer full name">
-
-<label>Staff number</label>
-<input id="newNumber" placeholder="Staff number">
-
-<button id="createProfile">Create lecturer profile</button>
-
-<hr>
-
-<h3>Student and lecturer registrations</h3>
-
-<div id="userList">Loading...</div>
-
-</div>
-
-<!-- ATTENDANCE -->
-
-<div class="card">
-
-<h2 id="workspaceTitle">Attendance</h2>
-
-<div id="studentAttendanceTools" class="hidden">
-
-<form id="attendanceForm">
-
-<label>Registration number</label>
-<input id="attendanceReg" required placeholder="Enter your registration number">
-
-<label>Take your selfie</label>
-<input id="attendancePhoto" type="file" accept="image/*" capture="user" required>
-
-<button type="submit">Submit attendance</button>
-
-</form>
-
-</div>
-
-<div id="lecturerTools" class="hidden">
-
-<label>Attendance date</label>
-<input type="date" id="attendanceDate">
-
-</div>
-
-<div id="attendanceRecords">Loading attendance...</div>
-
-<button class="blue" id="exportCsv">Download attendance CSV</button>
-
-</div>
-
-<!-- DOCUMENTS -->
-
-<div class="card">
-
-<h2>Documents</h2>
-
-<form id="documentForm">
-
-<label>Document title</label>
-<input id="documentTitle" required placeholder="Document title">
-
-<label>PDF or Word document</label>
-<input id="documentFile" type="file" accept=".pdf,.doc,.docx" required>
-
-<button type="submit">Upload document</button>
-
-</form>
-
-<div id="documentList">Loading documents...</div>
-
-</div>
-
-<button class="gray" id="logoutButton">Logout</button>
-
+    <button onclick="staffLoginNow()">Login</button>
+    <button class="secondary" onclick="showPage('home')">Back</button>
+    <p id="loginMessage" class="muted"></p>
+  </div>
 </section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="adminDashboard" class="hidden">
+  <div class="card center">
+    <h2>Administrator Dashboard</h2>
+    <div class="profile-wrap">
+      <img id="adminProfile" class="profile"
+        src="https://placehold.co/120x120?text=Admin"
+        onclick="openProfileCamera()">
+      <p>Tap your picture to take a profile selfie</p>
+    </div>
+    <video id="profileVideo" class="hidden" autoplay playsinline></video>
+    <canvas id="profileCanvas" class="hidden"></canvas>
+    <button id="captureProfileBtn" class="hidden"
+      onclick="captureProfilePhoto()">Take Profile Selfie</button>
+    <button class="secondary" onclick="logout()">Logout</button>
+  </div>
+
+  <nav>
+    <button onclick="adminTab('coursesTab')">Courses</button>
+    <button onclick="adminTab('attendanceTab')">Attendance</button>
+    <button onclick="adminTab('lecturersTab')">Lecturers</button>
+  </nav>
+
+  <div id="coursesTab" class="card">
+    <h3>Create Course and Course Code</h3>
+    <label>Course Name</label>
+    <input id="courseName" placeholder="Example: Law of Evidence">
+    <label>Course Code</label>
+    <input id="courseCode" placeholder="Example: LAW 301">
+    <label>Lecturer Email</label>
+    <input id="courseLecturerEmail" type="email"
+      placeholder="Email of the lecturer assigned to this course">
+    <button onclick="createCourse()">Save Course</button>
+    <p id="courseMessage" class="muted"></p>
+    <h3>Registered Courses</h3>
+    <div id="adminCourses"></div>
+  </div>
+
+  <div id="attendanceTab" class="card hidden">
+    <h3>All Student Attendance</h3>
+    <button onclick="loadAdminAttendance()">Refresh Attendance</button>
+    <button class="gold" onclick="exportAttendance()">Export CSV</button>
+    <div id="adminAttendance" class="table-wrap"></div>
+  </div>
+
+  <div id="lecturersTab" class="card hidden">
+    <h3>Lecturer Accounts</h3>
+    <p class="notice">Create lecturer accounts in Firebase Authentication first, using an individual email and password. Then enter the same email below to create the lecturer's JSA profile.</p>
+    <label>Lecturer Full Name</label>
+    <input id="lecturerName" placeholder="Lecturer name">
+    <label>Lecturer Email</label>
+    <input id="lecturerEmail" type="email" placeholder="Lecturer email">
+    <button onclick="registerLecturerProfile()">Add Lecturer Profile</button>
+    <p id="lecturerMessage" class="muted"></p>
+    <div id="lecturerList"></div>
+  </div>
+</section>
+
+<!-- LECTURER DASHBOARD -->
+<section id="lecturerDashboard" class="hidden">
+  <div class="card center">
+    <h2>Lecturer Dashboard</h2>
+    <div class="profile-wrap">
+      <img id="lecturerProfile" class="profile"
+        src="https://placehold.co/120x120?text=Lecturer"
+        onclick="openProfileCamera()">
+      <p>Tap your picture to take a profile selfie</p>
+    </div>
+    <video id="lecturerProfileVideo" class="hidden" autoplay playsinline></video>
+    <canvas id="lecturerProfileCanvas" class="hidden"></canvas>
+    <button id="lecturerCaptureProfileBtn" class="hidden"
+      onclick="captureProfilePhoto()">Take Profile Selfie</button>
+    <button class="secondary" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="card">
+    <h3>My Assigned Courses</h3>
+    <div id="lecturerCourses"></div>
+  </div>
+
+  <div class="card">
+    <h3>Attendance Submitted to Me</h3>
+    <button onclick="loadLecturerAttendance()">Refresh Attendance</button>
+    <div id="lecturerAttendance" class="table-wrap"></div>
+  </div>
+</section>
+
 </main>
 
 <script type="module">
-
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {initializeApp} from
+ "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
 import {
-getAuth,
-onAuthStateChanged,
-signInWithEmailAndPassword,
-createUserWithEmailAndPassword,
-signOut
+ getAuth, signInWithEmailAndPassword, signOut,
+ onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 import {
-getFirestore,
-collection,
-doc,
-getDoc,
-getDocs,
-setDoc,
-updateDoc,
-deleteDoc,
-query,
-where,
-serverTimestamp,
-addDoc,
-runTransaction
+ getFirestore, doc, getDoc, setDoc, addDoc, collection,
+ getDocs, query, where, orderBy, serverTimestamp, updateDoc
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL,
-deleteObject
+ getStorage, ref, uploadString, getDownloadURL
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 
-const firebaseConfig={
-
-apiKey:"AIzaSyAWo04Nta8TH-i-kWvIU232r4fuDUbvonA",
-authDomain:"jsa-6f63c.firebaseapp.com",
-projectId:"jsa-6f63c",
-storageBucket:"jsa-6f63c.firebasestorage.app",
-messagingSenderId:"979074445552",
-appId:"1:979074445552:web:0e4426df835fe015f1d235",
-measurementId:"G-3MHJHG6TC4"
-
+/* USE YOUR EXISTING FIREBASE CONFIGURATION */
+const firebaseConfig = {
+ apiKey: "PASTE_YOUR_EXISTING_API_KEY",
+ authDomain: "jsa-6f63c.firebaseapp.com",
+ projectId: "jsa-6f63c",
+ storageBucket: "jsa-6f63c.firebasestorage.app",
+ messagingSenderId: "PASTE_YOUR_EXISTING_MESSAGING_SENDER_ID",
+ appId: "PASTE_YOUR_EXISTING_APP_ID"
 };
 
-const ADMIN_UID="xX2v7CNcC6e5uXWDErGa0SiQ6yr1";
+const ADMIN_UID = "xX2v7CNcC6e5uXWDErGa0SiQ6yr1";
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
-const storage=getStorage(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-let currentUser=null;
-let currentProfile=null;
-let currentRole="";
-let attendanceRows=[];
+let currentUser = null;
+let currentProfile = null;
+let verifiedCourse = null;
+let studentPhoto = null;
+let profileStream = null;
+let studentStream = null;
+let allAttendance = [];
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-const today=()=>{
-const d=new Date();
-return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+window.showPage = function(id){
+ document.querySelectorAll("main > section").forEach(s=>s.classList.add("hidden"));
+ $(id).classList.remove("hidden");
 };
 
-const cleanReg=s=>s.trim().toUpperCase().replace(/\s+/g,"");
-
-const studentEmail=reg=>
-`${encodeURIComponent(cleanReg(reg)).replace(/%/g,"_")}@students.jsa-login.com`;
-
-const validImage=f=>
-f&&["image/jpeg","image/png","image/webp"].includes(f.type)&&f.size<=5*1024*1024;
-
-const fileExt=f=>(f.name.split(".").pop()||"").toLowerCase();
-
-$("connection").textContent="Firebase connected";
-$("attendanceDate").value=today();
-
-window.showPanel=id=>{
-["studentPanel","staffPanel"].forEach(x=>$(x).classList.add("hidden"));
-$(id).classList.remove("hidden");
+window.adminTab = function(id){
+ ["coursesTab","attendanceTab","lecturersTab"].forEach(x=>$(x).classList.add("hidden"));
+ $(id).classList.remove("hidden");
 };
 
-function showDashboard(){
-$("mainTabs").classList.add("hidden");
-$("studentPanel").classList.add("hidden");
-$("staffPanel").classList.add("hidden");
-$("dashboard").classList.remove("hidden");
+function cleanCode(value){
+ return String(value || "").trim().toUpperCase().replace(/\s+/g,"");
 }
 
-async function audit(action,target,details=""){
-if(!currentUser)return;
-try{
-await addDoc(collection(db,"auditLogs"),{
-actorUid:currentUser.uid,
-actorEmail:currentUser.email,
-action,target,details,
-createdAt:serverTimestamp()
-});
-}catch(e){console.warn(e)}
+function today(){
+ const d = new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 
-async function login(form,emailFn,passwordId){
-
-form.addEventListener("submit",async e=>{
-e.preventDefault();
-
-try{
-await signInWithEmailAndPassword(
-auth,emailFn(),$(passwordId).value
-);
-}catch(err){
-console.error(err);
-alert("Login failed. Check your details.");
+function safe(value){
+ return String(value ?? "").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
 }
 
-});
-
+function message(id,text){
+ $(id).textContent = text;
 }
 
-login(
-$("studentLoginForm"),
-()=>$("studentLoginReg").value,
-"studentLoginPassword"
-);
+/* PASSWORD SHOW / HIDE */
+window.togglePassword = function(id,button){
+ const field = $(id);
+ field.type = field.type === "password" ? "text" : "password";
+ button.textContent = field.type === "password" ? "Show" : "Hide";
+};
 
-login(
-$("staffLoginForm"),
-()=>$("staffEmail").value.trim(),
-"staffPassword"
-);
-
-// STUDENT REGISTRATION
-
-$("studentRegisterForm").addEventListener("submit",async e=>{
-
-e.preventDefault();
-
-const fullName=$("regName").value.trim();
-const registrationNumber=cleanReg($("regNumber").value);
-const password=$("regPassword").value;
-const email=studentEmail(registrationNumber);
-
-if(!fullName||!registrationNumber||password.length<6){
-alert("Complete all fields. Password must have at least 6 characters.");
-return;
-}
-
-try{
-
-const refUser=doc(db,"studentRegistrationNumbers",registrationNumber);
-
-await runTransaction(db,async tx=>{
-
-const existing=await tx.get(refUser);
-
-if(existing.exists())throw new Error("REG_EXISTS");
-
-tx.set(refUser,{
-registrationNumber,
-createdAt:serverTimestamp()
-});
-
-});
-
-let credential;
-
-try{
-credential=await createUserWithEmailAndPassword(auth,email,password);
-}catch(err){
-await deleteDoc(refUser);
-throw err;
-}
-
-await setDoc(doc(db,"users",credential.user.uid),{
-
-email,
-fullName,
-registrationNumber,
-role:"student",
-approved:false,
-photoURL:"",
-createdAt:serverTimestamp()
-
-});
-
-await signOut(auth);
-
-$("studentRegisterForm").reset();
-
-alert("Registration submitted. Wait for administrator approval.");
-
-}catch(err){
-
-console.error(err);
-
-alert(
-err.message==="REG_EXISTS"
-?"This registration number is already registered."
-:"Registration failed. Contact the administrator if the problem continues."
-);
-
-}
-
-});
-
-// AUTHENTICATION
+/* STAFF LOGIN */
+window.staffLoginNow = async function(){
+ const email = $("staffEmail").value.trim();
+ const password = $("staffPassword").value;
+ if(!email || !password){
+  message("loginMessage","Enter your email and password.");
+  return;
+ }
+ try{
+  message("loginMessage","Checking your account...");
+  await signInWithEmailAndPassword(auth,email,password);
+ }catch(error){
+  message("loginMessage","Login failed: "+error.message);
+ }
+};
 
 onAuthStateChanged(auth,async user=>{
+ currentUser = user;
+ currentProfile = null;
 
-currentUser=user;
-currentProfile=null;
-currentRole="";
+ if(!user){
+  showPage("home");
+  $("headerUser").textContent = "Attendance Management System";
+  return;
+ }
 
-if(!user){
+ try{
+  const snap = await getDoc(doc(db,"users",user.uid));
+  if(user.uid === ADMIN_UID){
+   currentProfile = snap.exists() ? snap.data() : {
+    role:"admin",fullName:"Administrator"
+   };
+   showPage("adminDashboard");
+   $("headerUser").textContent = "Administrator";
+   loadAdminCourses();
+   loadAdminAttendance();
+   loadLecturers();
+   if(currentProfile.photoURL) $("adminProfile").src=currentProfile.photoURL;
+  }else{
+   if(!snap.exists() || snap.data().role !== "lecturer" ||
+      snap.data().approved !== true){
+    await signOut(auth);
+    message("loginMessage","Your lecturer account is not approved. Contact the administrator.");
+    showPage("staffLogin");
+    return;
+   }
+   currentProfile = snap.data();
+   showPage("lecturerDashboard");
+   $("headerUser").textContent = currentProfile.fullName || "Lecturer";
+   if(currentProfile.photoURL) $("lecturerProfile").src=currentProfile.photoURL;
+   loadLecturerCourses();
+   loadLecturerAttendance();
+  }
+ }catch(error){
+  alert("Could not load your account: "+error.message);
+ }
+});
 
-$("dashboard").classList.add("hidden");
-$("mainTabs").classList.remove("hidden");
-return;
-
-}
-
-try{
-
-if(user.uid===ADMIN_UID){
-
-currentRole="admin";
-
-currentProfile={
-fullName:"Super Administrator",
-role:"admin",
-approved:true
+window.logout = async function(){
+ stopAllCameras();
+ await signOut(auth);
+ showPage("home");
 };
 
-}else{
+/* COURSE CODE CHECK — STUDENTS DO NOT REGISTER OR LOG IN */
+window.verifyStudentCourse = async function(){
+ const reg = $("studentReg").value.trim().toUpperCase();
+ const code = cleanCode($("studentCourseCode").value);
 
-const snap=await getDoc(doc(db,"users",user.uid));
+ if(!reg || !code){
+  message("studentMessage","Enter your registration number and course code.");
+  return;
+ }
 
-if(
-!snap.exists()||
-snap.data().approved!==true||
-!["student","lecturer"].includes(snap.data().role)
-){
+ try{
+  message("studentMessage","Checking course code...");
+  const courseSnap = await getDoc(doc(db,"courses",code));
 
-alert("Your account is awaiting approval. Contact the administrator.");
-await signOut(auth);
-return;
+  if(!courseSnap.exists()){
+   message("studentMessage","This course code is not recognised. Check with your lecturer.");
+   return;
+  }
 
-}
+  const course = courseSnap.data();
+  if(course.active === false){
+   message("studentMessage","This course is currently inactive.");
+   return;
+  }
 
-currentProfile=snap.data();
-currentRole=currentProfile.role;
+  verifiedCourse = {
+   code,
+   name:course.courseName,
+   lecturerUid:course.lecturerUid,
+   lecturerEmail:course.lecturerEmail
+  };
 
-}
+  $("verifiedCourseInfo").textContent =
+   "Course: "+course.courseName+" | Code: "+code;
 
-await openDashboard();
+  $("studentCameraSection").classList.remove("hidden");
+  message("studentMessage","Course verified. Take your selfie to submit attendance.");
+  await startStudentCamera();
 
-}catch(e){
-
-console.error(e);
-alert("Could not verify your account.");
-await signOut(auth);
-
-}
-
-});
-
-// DASHBOARD
-
-async function openDashboard(){
-
-showDashboard();
-
-$("dashboardTitle").textContent=
-currentRole==="admin"?"Super Administrator":
-currentRole==="lecturer"?"Lecturer Dashboard":
-"Student Dashboard";
-
-$("welcome").textContent=
-`${currentProfile.fullName||currentUser.email} · ${currentProfile.registrationNumber||currentUser.email}`;
-
-$("roleBadge").textContent=currentRole.toUpperCase();
-
-$("workspaceTitle").textContent=
-currentRole==="student"?"Submit attendance / My attendance":"Student attendance";
-
-$("adminPanel").classList.toggle("hidden",currentRole!=="admin");
-
-$("lecturerTools").classList.toggle("hidden",currentRole==="student");
-
-$("studentAttendanceTools").classList.toggle("hidden",currentRole!=="student");
-
-$("attendanceReg").value=currentProfile.registrationNumber||"";
-
-$("profileImage").src=currentProfile.photoURL||"";
-
-await Promise.all([
-loadAttendance(),
-loadDocuments()
-]);
-
-if(currentRole==="admin")await loadUsersAndStats();
-
-}
-
-// PROFILE PHOTO
-
-$("saveProfilePhoto").onclick=async()=>{
-
-const f=$("profileFile").files[0];
-
-if(!validImage(f)){
-alert("Choose JPG, PNG or WEBP up to 5 MB.");
-return;
-}
-
-try{
-
-const path=`profilePhotos/${currentUser.uid}/profile`;
-
-await uploadBytes(ref(storage,path),f,{contentType:f.type});
-
-const url=await getDownloadURL(ref(storage,path));
-
-if(currentRole!=="admin"){
-await updateDoc(doc(db,"users",currentUser.uid),{
-photoURL:url,photoPath:path
-});
-}
-
-currentProfile={...currentProfile,photoURL:url};
-
-$("profileImage").src=url;
-
-await audit("UPDATE_PROFILE_PHOTO",currentUser.uid);
-
-alert("Profile photograph saved.");
-
-}catch(e){
-
-console.error(e);
-alert("Photo upload failed. Check Storage rules.");
-
-}
-
+ }catch(error){
+  message("studentMessage","Unable to verify course: "+error.message);
+ }
 };
 
-// CREATE LECTURER
-
-$("createProfile").onclick=async()=>{
-
-if(currentRole!=="admin")return;
-
-const uid=$("newUid").value.trim();
-const email=$("newEmail").value.trim();
-const fullName=$("newName").value.trim();
-const number=$("newNumber").value.trim();
-
-if(!uid||!email||!fullName){
-alert("Enter UID, email and full name.");
-return;
+async function startStudentCamera(){
+ try{
+  studentStream = await navigator.mediaDevices.getUserMedia({
+   video:{facingMode:"user"},audio:false
+  });
+  $("studentVideo").srcObject=studentStream;
+  $("studentVideo").classList.remove("hidden");
+  $("studentPreview").classList.add("hidden");
+  $("submitAttendanceBtn").classList.add("hidden");
+ }catch(error){
+  message("attendanceMessage","Camera access failed. Allow camera permission and use HTTPS.");
+ }
 }
 
-try{
-
-await setDoc(doc(db,"users",uid),{
-
-email,
-fullName,
-role:"lecturer",
-staffNumber:number,
-approved:false,
-photoURL:"",
-createdAt:serverTimestamp()
-
-});
-
-await audit("CREATE_LECTURER_PROFILE",uid);
-
-["newUid","newEmail","newName","newNumber"].forEach(id=>$(id).value="");
-
-alert("Lecturer profile created. Approve it below.");
-
-await loadUsersAndStats();
-
-}catch(e){
-
-console.error(e);
-alert("Could not create lecturer profile.");
-
-}
-
+window.takeStudentSelfie = function(){
+ const video=$("studentVideo");
+ if(!video.videoWidth){
+  message("attendanceMessage","Camera is not ready. Try again.");
+  return;
+ }
+ const canvas=$("studentCanvas");
+ canvas.width=video.videoWidth;
+ canvas.height=video.videoHeight;
+ canvas.getContext("2d").drawImage(video,0,0);
+ studentPhoto=canvas.toDataURL("image/jpeg",0.75);
+ $("studentPreview").src=studentPhoto;
+ $("studentPreview").classList.remove("hidden");
+ $("submitAttendanceBtn").classList.remove("hidden");
+ stopCamera("studentVideo");
+ message("attendanceMessage","Selfie captured. Press Submit Attendance.");
 };
 
-// ADMIN ACCOUNTS
+window.submitStudentAttendance = async function(){
+ if(!verifiedCourse || !studentPhoto){
+  message("attendanceMessage","Verify the course and take your selfie first.");
+  return;
+ }
 
-async function loadUsersAndStats(){
+ const reg=$("studentReg").value.trim().toUpperCase();
+ const date=today();
 
-try{
+ try{
+  $("submitAttendanceBtn").disabled=true;
+  message("attendanceMessage","Submitting attendance...");
 
-const [us,ats,docs]=await Promise.all([
+  const photoRef=ref(storage,
+   "attendanceProofs/"+verifiedCourse.code+"/"+date+"/"+Date.now()+"_"+cleanCode(reg)+".jpg");
 
-getDocs(collection(db,"users")),
-getDocs(collection(db,"attendance")),
-getDocs(collection(db,"documents"))
+  await uploadString(photoRef,studentPhoto,"data_url");
+  const photoURL=await getDownloadURL(photoRef);
 
-]);
+  await addDoc(collection(db,"attendance"),{
+   registrationNumber:reg,
+   courseCode:verifiedCourse.code,
+   courseName:verifiedCourse.name,
+   lecturerUid:verifiedCourse.lecturerUid,
+   lecturerEmail:verifiedCourse.lecturerEmail,
+   photoURL,
+   date,
+   status:"Pending",
+   submittedAt:serverTimestamp()
+  });
 
-$("accountCount").textContent=us.size;
-$("attendanceCount").textContent=ats.size;
-$("documentCount").textContent=docs.size;
+  message("attendanceMessage","Attendance submitted successfully to your lecturer and the administrator.");
+  $("submitAttendanceBtn").classList.add("hidden");
+  $("studentCameraSection").classList.add("hidden");
+  $("studentReg").value="";
+  $("studentCourseCode").value="";
+  verifiedCourse=null;
+  studentPhoto=null;
 
-const area=$("userList");
-area.replaceChildren();
-
-us.forEach(s=>{
-
-const u=s.data();
-
-const box=document.createElement("div");
-box.className="item";
-
-const body=document.createElement("div");
-body.className="item-body";
-
-const t=document.createElement("strong");
-
-t.textContent=`${u.fullName||"Unnamed"} — ${u.role||"No role"}`;
-
-const p=document.createElement("p");
-p.className="small";
-
-p.textContent=
-`${u.registrationNumber||u.email||""} · ${u.email||""} · ${u.approved?"Approved":"Pending"}`;
-
-body.append(t,p);
-box.append(body);
-
-if(!u.approved){
-
-const b=document.createElement("button");
-b.textContent="Approve";
-
-b.onclick=async()=>{
-
-try{
-
-await updateDoc(doc(db,"users",s.id),{
-approved:true
-});
-
-await audit("APPROVE_USER",s.id);
-
-await loadUsersAndStats();
-
-}catch(e){
-
-alert("Approval failed.");
-
-}
-
+ }catch(error){
+  message("attendanceMessage","Submission failed: "+error.message);
+ }finally{
+  $("submitAttendanceBtn").disabled=false;
+ }
 };
 
-box.append(b);
+/* ADMIN: CREATE COURSE AND ASSIGN LECTURER */
+window.createCourse = async function(){
+ if(!currentUser || currentUser.uid!==ADMIN_UID) return;
 
-}
+ const name=$("courseName").value.trim();
+ const code=cleanCode($("courseCode").value);
+ const email=$("courseLecturerEmail").value.trim().toLowerCase();
 
-const edit=document.createElement("button");
-edit.className="light";
-edit.textContent="Edit";
+ if(!name || !code || !email){
+  message("courseMessage","Complete all course details.");
+  return;
+ }
 
-edit.onclick=async()=>{
+ try{
+  const lecturerQuery=query(
+   collection(db,"users"),
+   where("email","==",email),
+   where("role","==","lecturer"),
+   where("approved","==",true)
+  );
+  const lecturerSnap=await getDocs(lecturerQuery);
 
-const name=prompt("Full name",u.fullName||"");
+  if(lecturerSnap.empty){
+   message("courseMessage","No approved lecturer profile found for that email.");
+   return;
+  }
 
-if(name===null)return;
+  const lecturerDoc=lecturerSnap.docs[0];
+  await setDoc(doc(db,"courses",code),{
+   courseName:name,
+   courseCode:code,
+   lecturerUid:lecturerDoc.id,
+   lecturerEmail:email,
+   active:true,
+   createdAt:serverTimestamp(),
+   createdBy:currentUser.uid
+  });
 
-try{
-
-await updateDoc(doc(db,"users",s.id),{
-fullName:name.trim()
-});
-
-await loadUsersAndStats();
-
-}catch(e){
-
-alert("Edit failed.");
-
-}
-
+  $("courseName").value="";
+  $("courseCode").value="";
+  $("courseLecturerEmail").value="";
+  message("courseMessage","Course created and assigned successfully.");
+  loadAdminCourses();
+ }catch(error){
+  message("courseMessage","Could not create course: "+error.message);
+ }
 };
 
-box.append(edit);
-
-const del=document.createElement("button");
-del.className="red";
-del.textContent="Delete profile";
-
-del.onclick=async()=>{
-
-if(!confirm("Delete this profile? The Firebase login is not deleted."))return;
-
-try{
-
-await deleteDoc(doc(db,"users",s.id));
-
-await loadUsersAndStats();
-
-}catch(e){
-
-alert("Delete failed.");
-
+async function loadAdminCourses(){
+ if(!currentUser || currentUser.uid!==ADMIN_UID) return;
+ const snap=await getDocs(collection(db,"courses"));
+ let html="<div class='table-wrap'><table><tr><th>Course</th><th>Code</th><th>Lecturer</th><th>Status</th></tr>";
+ snap.forEach(d=>{
+  const c=d.data();
+  html+="<tr><td>"+safe(c.courseName)+"</td><td>"+safe(c.courseCode)+
+   "</td><td>"+safe(c.lecturerEmail)+"</td><td>"+(c.active===false?"Inactive":"Active")+"</td></tr>";
+ });
+ html+="</table></div>";
+ $("adminCourses").innerHTML=html;
 }
 
+/* LECTURER: VIEW ASSIGNED COURSES */
+async function loadLecturerCourses(){
+ if(!currentUser) return;
+ const q=query(collection(db,"courses"),where("lecturerUid","==",currentUser.uid));
+ const snap=await getDocs(q);
+ let html="<div class='table-wrap'><table><tr><th>Course</th><th>Course Code</th></tr>";
+ snap.forEach(d=>{
+  const c=d.data();
+  html+="<tr><td>"+safe(c.courseName)+"</td><td>"+safe(c.courseCode)+"</td></tr>";
+ });
+ html+="</table></div>";
+ $("lecturerCourses").innerHTML=snap.empty?"No courses assigned yet.":html;
+}
+
+/* ATTENDANCE LISTS */
+window.loadAdminAttendance = async function(){
+ if(!currentUser || currentUser.uid!==ADMIN_UID) return;
+ try{
+  const snap=await getDocs(collection(db,"attendance"));
+  allAttendance=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderAttendance("adminAttendance",allAttendance,true);
+ }catch(error){
+  $("adminAttendance").textContent="Could not load attendance: "+error.message;
+ }
 };
 
-box.append(del);
-
-area.append(box);
-
-});
-
-}catch(e){
-
-console.error(e);
-$("userList").textContent="Could not load accounts.";
-
-}
-
-}
-
-// ATTENDANCE
-
-async function loadAttendance(){
-
-const area=$("attendanceRecords");
-
-area.textContent="Loading attendance...";
-
-try{
-
-let snaps;
-
-if(currentRole==="student"){
-
-snaps=await getDocs(query(
-collection(db,"attendance"),
-where("studentUid","==",currentUser.uid)
-));
-
-}else{
-
-snaps=await getDocs(collection(db,"attendance"));
-
-}
-
-attendanceRows=[];
-
-const date=$("attendanceDate").value||today();
-
-snaps.forEach(s=>{
-
-const r={id:s.id,...s.data()};
-
-if(currentRole==="student"||r.date===date){
-attendanceRows.push(r);
-}
-
-});
-
-attendanceRows.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
-
-renderAttendance();
-
-}catch(e){
-
-console.error(e);
-area.textContent="Could not load attendance. Check Firestore rules.";
-
-}
-
-}
-
-function renderAttendance(){
-
-const area=$("attendanceRecords");
-
-area.replaceChildren();
-
-const h=document.createElement("h3");
-
-h.textContent=`Attendance records: ${attendanceRows.length}`;
-
-area.append(h);
-
-if(!attendanceRows.length){
-
-area.append(document.createTextNode("No attendance records found."));
-
-return;
-
-}
-
-attendanceRows.forEach(r=>{
-
-const box=document.createElement("div");
-box.className="item";
-
-if(r.photoURL){
-
-const img=document.createElement("img");
-
-img.src=r.photoURL;
-img.alt="Student attendance selfie";
-
-box.append(img);
-
-}
-
-const body=document.createElement("div");
-body.className="item-body";
-
-const p=document.createElement("strong");
-
-p.textContent=`${r.registrationNumber||""} — ${r.name||""}`;
-
-const d=document.createElement("p");
-
-d.className="small";
-
-d.textContent=
-`${r.date||""} · ${r.submitted||""} · ${r.status||"Pending"} · ${r.markedByEmail||"Not marked"}`;
-
-body.append(p,d);
-box.append(body);
-
-if(currentRole==="admin"||currentRole==="lecturer"){
-
-for(const status of ["Present","Absent"]){
-
-const b=document.createElement("button");
-
-b.textContent=status;
-b.className=status==="Absent"?"gray":"";
-
-b.onclick=()=>markAttendance(r.id,status);
-
-box.append(b);
-
-}
-
-}
-
-if(currentRole==="admin"){
-
-const del=document.createElement("button");
-
-del.className="red";
-del.textContent="Delete";
-
-del.onclick=()=>deleteAttendance(r);
-
-box.append(del);
-
-}
-
-area.append(box);
-
-});
-
-}
-
-async function markAttendance(id,status){
-
-try{
-
-await updateDoc(doc(db,"attendance",id),{
-
-status,
-markedByUid:currentUser.uid,
-markedByEmail:currentUser.email,
-updatedAt:serverTimestamp()
-
-});
-
-await audit("MARK_ATTENDANCE",id,status);
-
-await loadAttendance();
-
-}catch(e){
-
-console.error(e);
-alert("Could not update attendance.");
-
-}
-
-}
-
-async function deleteAttendance(r){
-
-if(!confirm("Permanently delete this attendance record?"))return;
-
-try{
-
-await deleteDoc(doc(db,"attendance",r.id));
-
-if(r.photoPath){
-
-try{
-await deleteObject(ref(storage,r.photoPath));
-}catch(e){}
-
-}
-
-await loadAttendance();
-
-}catch(e){
-
-alert("Could not delete attendance.");
-
-}
-
-}
-
-$("attendanceDate").addEventListener("change",loadAttendance);
-
-// STUDENT ATTENDANCE SUBMISSION
-
-$("attendanceForm").addEventListener("submit",async e=>{
-
-e.preventDefault();
-
-if(currentRole!=="student")return;
-
-const registrationNumber=cleanReg($("attendanceReg").value);
-
-const f=$("attendancePhoto").files[0];
-
-if(registrationNumber!==cleanReg(currentProfile.registrationNumber||"")){
-
-alert("Enter the registration number linked to your account.");
-
-return;
-
-}
-
-if(!validImage(f)){
-
-alert("Take a JPG, PNG or WEBP selfie up to 5 MB.");
-
-return;
-
-}
-
-const date=today();
-
-const id=`${currentUser.uid}_${date}`;
-
-const path=`attendanceProofs/${currentUser.uid}/${date}`;
-
-try{
-
-const existing=await getDoc(doc(db,"attendance",id));
-
-if(existing.exists()){
-
-alert("You have already submitted attendance today.");
-
-return;
-
-}
-
-await uploadBytes(ref(storage,path),f,{
-contentType:f.type
-});
-
-const photoURL=await getDownloadURL(ref(storage,path));
-
-await setDoc(doc(db,"attendance",id),{
-
-studentUid:currentUser.uid,
-name:currentProfile.fullName,
-registrationNumber,
-date,
-photoURL,
-photoPath:path,
-submitted:new Date().toLocaleTimeString(),
-status:"Pending",
-createdAt:serverTimestamp()
-
-});
-
-await audit("SUBMIT_ATTENDANCE",id);
-
-$("attendanceForm").reset();
-
-$("attendanceReg").value=currentProfile.registrationNumber;
-
-alert("Attendance submitted.");
-
-await loadAttendance();
-
-}catch(err){
-
-console.error(err);
-
-alert("Attendance submission failed. Check Firebase rules and internet connection.");
-
-}
-
-});
-
-// DOCUMENTS
-
-$("documentForm").addEventListener("submit",async e=>{
-
-e.preventDefault();
-
-const f=$("documentFile").files[0];
-const title=$("documentTitle").value.trim();
-
-if(!f||!title)return;
-
-if(!["pdf","doc","docx"].includes(fileExt(f))||f.size>10*1024*1024){
-
-alert("Choose PDF or Word document up to 10 MB.");
-
-return;
-
-}
-
-try{
-
-const id=crypto.randomUUID();
-
-const path=`documents/${currentUser.uid}/${id}_${f.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;
-
-await uploadBytes(ref(storage,path),f,{
-contentType:f.type||"application/octet-stream"
-});
-
-const url=await getDownloadURL(ref(storage,path));
-
-await setDoc(doc(db,"documents",id),{
-
-ownerUid:currentUser.uid,
-ownerEmail:currentUser.email,
-title,
-fileName:f.name,
-fileURL:url,
-filePath:path,
-uploadedAt:serverTimestamp()
-
-});
-
-$("documentForm").reset();
-
-await loadDocuments();
-
-alert("Document uploaded.");
-
-}catch(e){
-
-console.error(e);
-alert("Document upload failed.");
-
-}
-
-});
-
-async function loadDocuments(){
-
-const area=$("documentList");
-
-area.textContent="Loading documents...";
-
-try{
-
-const snaps=currentRole==="admin"
-?await getDocs(collection(db,"documents"))
-:await getDocs(query(collection(db,"documents"),where("ownerUid","==",currentUser.uid)));
-
-area.replaceChildren();
-
-if(snaps.empty){
-
-area.textContent="No documents uploaded.";
-
-return;
-
-}
-
-snaps.forEach(s=>{
-
-const d=s.data();
-
-const box=document.createElement("div");
-box.className="item";
-
-const body=document.createElement("div");
-body.className="item-body";
-
-const t=document.createElement("strong");
-t.textContent=d.title||d.fileName;
-
-const a=document.createElement("a");
-a.href=d.fileURL;
-a.target="_blank";
-a.rel="noopener";
-a.textContent="Open document";
-
-body.append(t,document.createElement("br"),a);
-
-box.append(body);
-
-if(currentRole==="admin"||d.ownerUid===currentUser.uid){
-
-const del=document.createElement("button");
-
-del.className="red";
-del.textContent="Delete";
-
-del.onclick=async()=>{
-
-if(!confirm("Delete this document?"))return;
-
-try{
-
-await deleteDoc(doc(db,"documents",s.id));
-
-if(d.filePath){
-
-try{
-await deleteObject(ref(storage,d.filePath));
-}catch(e){}
-
-}
-
-await loadDocuments();
-
-}catch(e){
-
-alert("Delete failed.");
-
-}
-
+window.loadLecturerAttendance = async function(){
+ if(!currentUser) return;
+ try{
+  const q=query(collection(db,"attendance"),
+   where("lecturerUid","==",currentUser.uid));
+  const snap=await getDocs(q);
+  const records=snap.docs.map(d=>({id:d.id,...d.data()}));
+  renderAttendance("lecturerAttendance",records,false);
+ }catch(error){
+  $("lecturerAttendance").textContent="Could not load attendance: "+error.message;
+ }
 };
 
-box.append(del);
+function renderAttendance(target,records,isAdmin){
+ if(records.length===0){
+  $(target).innerHTML="<p>No attendance submissions yet.</p>";
+  return;
+ }
 
+ let html="<table><tr><th>Registration No.</th><th>Course</th><th>Date</th><th>Selfie</th><th>Status</th>";
+ if(isAdmin) html+="<th>Lecturer</th>";
+ html+="</tr>";
+
+ records.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+ records.forEach(r=>{
+  html+="<tr><td>"+safe(r.registrationNumber)+"</td><td>"+
+   safe(r.courseName)+" ("+safe(r.courseCode)+")</td><td>"+
+   safe(r.date)+"</td><td><a href='"+safe(r.photoURL)+
+   "' target='_blank' rel='noopener'>View selfie</a></td><td>"+
+   safe(r.status||"Pending")+"</td>";
+  if(isAdmin) html+="<td>"+safe(r.lecturerEmail)+"</td>";
+  html+="</tr>";
+ });
+ html+="</table>";
+ $(target).innerHTML=html;
 }
 
-area.append(box);
+/* ADD LECTURER PROFILE
+   Lecturer must already exist in Firebase Authentication.
+   The lecturer signs in with their own email and password. */
+window.registerLecturerProfile = async function(){
+ if(!currentUser || currentUser.uid!==ADMIN_UID) return;
 
-});
+ const name=$("lecturerName").value.trim();
+ const email=$("lecturerEmail").value.trim().toLowerCase();
 
-}catch(e){
+ if(!name || !email){
+  message("lecturerMessage","Enter lecturer name and email.");
+  return;
+ }
 
-console.error(e);
-area.textContent="Could not load documents.";
-
-}
-
-}
-
-// EXPORT CSV
-
-$("exportCsv").onclick=()=>{
-
-const rows=[
-
-["Registration number","Name","Date","Time","Status"],
-
-...attendanceRows.map(r=>[
-r.registrationNumber,
-r.name,
-r.date,
-r.submitted,
-r.status
-])
-
-];
-
-const csv=rows.map(row=>
-row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")
-).join("\n");
-
-const url=URL.createObjectURL(
-new Blob([csv],{type:"text/csv;charset=utf-8"})
-);
-
-const a=document.createElement("a");
-
-a.href=url;
-a.download=`JSA-attendance-${today()}.csv`;
-
-a.click();
-
-URL.revokeObjectURL(url);
-
+ try{
+  await addDoc(collection(db,"lecturerInvitations"),{
+   fullName:name,email,approved:true,
+   createdAt:serverTimestamp(),createdBy:ADMIN_UID
+  });
+  message("lecturerMessage",
+   "Invitation record saved. The lecturer must sign in once to activate their profile.");
+  $("lecturerName").value="";
+  $("lecturerEmail").value="";
+ }catch(error){
+  message("lecturerMessage","Could not save lecturer record: "+error.message);
+ }
 };
 
-$("logoutButton").onclick=()=>signOut(auth);
+async function loadLecturers(){
+ if(!currentUser || currentUser.uid!==ADMIN_UID) return;
+ try{
+  const q=query(collection(db,"users"),where("role","==","lecturer"));
+  const snap=await getDocs(q);
+  let html="<div class='table-wrap'><table><tr><th>Name</th><th>Email</th><th>Status</th></tr>";
+  snap.forEach(d=>{
+   const u=d.data();
+   html+="<tr><td>"+safe(u.fullName)+"</td><td>"+safe(u.email)+
+    "</td><td>"+(u.approved?"Approved":"Pending")+"</td></tr>";
+  });
+  html+="</table></div>";
+  $("lecturerList").innerHTML=html;
+ }catch(error){
+  $("lecturerList").textContent=error.message;
+ }
+}
 
+/* PROFILE SELFIE CAMERA */
+window.openProfileCamera = async function(){
+ if(!currentUser) return;
+ try{
+  stopAllCameras();
+  const isAdmin=currentUser.uid===ADMIN_UID;
+  const video=$(isAdmin?"profileVideo":"lecturerProfileVideo");
+  const capture=$(isAdmin?"captureProfileBtn":"lecturerCaptureProfileBtn");
+  profileStream=await navigator.mediaDevices.getUserMedia({
+   video:{facingMode:"user"},audio:false
+  });
+  video.srcObject=profileStream;
+  video.classList.remove("hidden");
+  capture.classList.remove("hidden");
+ }catch(error){
+  alert("Unable to open camera. Allow camera permission and use HTTPS. "+error.message);
+ }
+};
+
+window.captureProfilePhoto = async function(){
+ if(!profileStream || !currentUser) return;
+
+ const isAdmin=currentUser.uid===ADMIN_UID;
+ const video=$(isAdmin?"profileVideo":"lecturerProfileVideo");
+ const canvas=$(isAdmin?"profileCanvas":"lecturerProfileCanvas");
+ const capture=$(isAdmin?"captureProfileBtn":"lecturerCaptureProfileBtn");
+
+ canvas.width=video.videoWidth;
+ canvas.height=video.videoHeight;
+ canvas.getContext("2d").drawImage(video,0,0);
+
+ const data=canvas.toDataURL("image/jpeg",0.8);
+
+ try{
+  const photoRef=ref(storage,"profilePhotos/"+currentUser.uid+"/profile.jpg");
+  await uploadString(photoRef,data,"data_url");
+  const url=await getDownloadURL(photoRef);
+
+  if(isAdmin){
+   await setDoc(doc(db,"users",currentUser.uid),{
+    photoURL:url,role:"admin",fullName:"Administrator"
+   },{merge:true});
+   $("adminProfile").src=url;
+  }else{
+   await updateDoc(doc(db,"users",currentUser.uid),{photoURL:url});
+   $("lecturerProfile").src=url;
+  }
+
+  stopAllCameras();
+  video.classList.add("hidden");
+  capture.classList.add("hidden");
+  alert("Your profile picture has been updated successfully.");
+ }catch(error){
+  alert("Could not save profile picture: "+error.message);
+ }
+};
+
+/* CAMERA CLEANUP */
+window.stopCamera = function(videoId){
+ const video=$(videoId);
+ if(video.srcObject){
+  video.srcObject.getTracks().forEach(track=>track.stop());
+  video.srcObject=null;
+ }
+ if(videoId==="studentVideo") studentStream=null;
+};
+
+function stopAllCameras(){
+ if(studentStream){
+  studentStream.getTracks().forEach(t=>t.stop());
+  studentStream=null;
+ }
+ if(profileStream){
+  profileStream.getTracks().forEach(t=>t.stop());
+  profileStream=null;
+ }
+ ["studentVideo","profileVideo","lecturerProfileVideo"].forEach(id=>{
+  const v=$(id);
+  if(v) v.srcObject=null;
+ });
+}
+
+/* CSV EXPORT */
+window.exportAttendance = function(){
+ if(!allAttendance.length){
+  alert("There is no attendance data to export.");
+  return;
+ }
+ const headers=["Registration Number","Course","Course Code","Date","Status","Lecturer Email"];
+ const rows=allAttendance.map(r=>[
+  r.registrationNumber,r.courseName,r.courseCode,r.date,r.status,r.lecturerEmail
+ ]);
+ const csv=[headers,...rows].map(row=>
+  row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")
+ ).join("\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="JSA_Attendance_"+today()+".csv";
+ a.click();URL.revokeObjectURL(url);
+};
+
+/* INITIAL PAGE */
+showPage("home");
 </script>
 </body>
 </html>
